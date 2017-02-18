@@ -257,74 +257,74 @@ que é razoavelmente precisa para $|{\cal K} | \ge 10$ e 6,5~dB abaixo da $\text{
 %Quando duas ou mais senoides são somadas
 
 \section{Arquitetura para o Transmissor-Heteródino do Sistema de Bloqueador de Telefonia Móvel Proposto} \label{sec:trHeterodin}
-
-\section{Ip-core para geração de sinais multitoom aplicados no bloqueio de sinais de telefonia móvel}
-
-\section{Introdução}
-\section{síntese digital direta}
-A síntese digital direta (do inglês \emph{direct digital sinthesys}) é uma técnica que consiste na aplicação de técnicas e blocos de processamento digital de sinais para gerar um sinal com frequência e fase sintonizável referenciada a uma frequência fixa.
- 
-Today’s cost-competitive, high-performance, functionally-integrated, and small package-sized
-DDS products are fast becoming an alternative to traditional frequency-agile analog synthesizer
-solutions. The integration of a high-speed, high-performance, D/A converter and DDS
-architecture onto a single chip (forming what is commonly known as a Complete-DDS solution)
-enabled this technology to target a wider range of applications and provide, in many cases, an
-attractive alternative to analog-based PLL synthesizers. For many applications, the DDS solution
-holds some distinct advantages over the equivalent agile analog frequency synthesizer employing
-PLL circuitry.
-
-DDS advantages:
-· Micro-Hertz tuning resolution of the output frequency and sub-degree phase tuning
-capability, all under complete digital control.
-· Extremely fast “hopping speed” in tuning output frequency (or phase), phase-continuous
-frequency hops with no over/undershoot or analog-related loop settling time anomalies.
-· The DDS digital architecture eliminates the need for the manual system tuning and tweaking
-associated with component aging and temperature drift in analog synthesizer solutions.
-· The digital control interface of the DDS architecture facilitates an environment where
-systems can be remotely controlled, and minutely optimized, under processor control.
-· When utilized as a quadrature synthesizer, DDS afford unparalleled matching and control of I
-and Q synthesized outputs.
-
-\subsection{Teoria de operação}
-In its simplest form, a direct digital synthesizer can be implemented from a precision reference
-clock, an address counter, a programmable read only memory (PROM), and a D/A converter (see
-Figure 1-1).
-
-In this case, the digital amplitude information that corresponds to a complete cycle of a sinewave
-is stored in the PROM. The PROM is therefore functioning as a sine lookup table. The address
-counter steps through and accesses each of the PROM’s memory locations and the contents (the
-equivalent sine amplitude words) are presented to a high-speed D/A converter. The D/A
-converter generates an analog sinewave in response to the digital input words from the PROM.
-The output frequency of this DDS implementation is dependent on 1.) the frequency of the
-reference clock, and 2.) the sinewave step size that is programmed into the PROM. While the
-analog output fidelity, jitter, and AC performance of this simplistic architecture can be quite
-good, it lacks tuning flexibility.
-
-With the introduction of a phase accumulator function into the digital signal chain, this
-architecture becomes a numerically-controlled oscillator which is the core of a highly-flexible
-DDS device. As figure 1-2 shows, an N-bit variable-modulus counter and phase
-
-register are implemented in the circuit before the sine lookup table, as a replacement for the
-address counter. The carry function allows this function as a “phase wheel” in the DDS
-architecture. To understand this basic function, visualize the sinewave oscillation as a vector rotating around a phase circle (see Figure 1-3). Each designated point on the phase wheel
-corresponds to the equivalent point on a cycle of a sine waveform. As the vector rotates around the wheel, visualize that a corresponding
-output sinewave is being generated. One revolution of the vector around the phase wheel, at a
-constant speed, results in one complete cycle of the output sinewave. The phase accumulator is
-utilized to provide the equivalent of the vector’s linear rotation around the phase wheel. The
-contents of the phase accumulator correspond to the points on the cycle of the output sinewave.
-The number of discrete phase points contained in the “wheel” is determined by the resolution, N,
-of the phase accumulator. The output of the phase accumulator is linear and cannot directly be used to generate a sinewave or any other waveform except a ramp. Therefore, a phase-toamplitude
-lookup table is used to convert a truncated version of the phase accumulator’s
-instantaneous output value into the sinewave amplitude information that is presented to the D/A
-converter. Most DDS architectures exploit the symmetrical nature of a sinewave and utilize
-mapping logic to synthesize a complete sinewave cycle from ¼ cycle of data from the phase
-accumulator. The phase-to-amplitude lookup table generates all the necessary data by reading
-forward then back through the lookup table.
-
-
+%
+%\section{Ip-core para geração de sinais multitoom aplicados no bloqueio de sinais de telefonia móvel}
+%
+%\section{Introdução}
+%\section{síntese digital direta}
+%A síntese digital direta (do inglês \emph{direct digital sinthesys}) é uma técnica que consiste na aplicação de técnicas e blocos de processamento digital de sinais para gerar um sinal com frequência e fase sintonizável referenciada a uma frequência fixa.
+ %
+%Today’s cost-competitive, high-performance, functionally-integrated, and small package-sized
+%DDS products are fast becoming an alternative to traditional frequency-agile analog synthesizer
+%solutions. The integration of a high-speed, high-performance, D/A converter and DDS
+%architecture onto a single chip (forming what is commonly known as a Complete-DDS solution)
+%enabled this technology to target a wider range of applications and provide, in many cases, an
+%attractive alternative to analog-based PLL synthesizers. For many applications, the DDS solution
+%holds some distinct advantages over the equivalent agile analog frequency synthesizer employing
+%PLL circuitry.
+%
+%DDS advantages:
+%· Micro-Hertz tuning resolution of the output frequency and sub-degree phase tuning
+%capability, all under complete digital control.
+%· Extremely fast “hopping speed” in tuning output frequency (or phase), phase-continuous
+%frequency hops with no over/undershoot or analog-related loop settling time anomalies.
+%· The DDS digital architecture eliminates the need for the manual system tuning and tweaking
+%associated with component aging and temperature drift in analog synthesizer solutions.
+%· The digital control interface of the DDS architecture facilitates an environment where
+%systems can be remotely controlled, and minutely optimized, under processor control.
+%· When utilized as a quadrature synthesizer, DDS afford unparalleled matching and control of I
+%and Q synthesized outputs.
+%
+%\subsection{Teoria de operação}
+%In its simplest form, a direct digital synthesizer can be implemented from a precision reference
+%clock, an address counter, a programmable read only memory (PROM), and a D/A converter (see
+%Figure 1-1).
+%
+%In this case, the digital amplitude information that corresponds to a complete cycle of a sinewave
+%is stored in the PROM. The PROM is therefore functioning as a sine lookup table. The address
+%counter steps through and accesses each of the PROM’s memory locations and the contents (the
+%equivalent sine amplitude words) are presented to a high-speed D/A converter. The D/A
+%converter generates an analog sinewave in response to the digital input words from the PROM.
+%The output frequency of this DDS implementation is dependent on 1.) the frequency of the
+%reference clock, and 2.) the sinewave step size that is programmed into the PROM. While the
+%analog output fidelity, jitter, and AC performance of this simplistic architecture can be quite
+%good, it lacks tuning flexibility.
+%
+%With the introduction of a phase accumulator function into the digital signal chain, this
+%architecture becomes a numerically-controlled oscillator which is the core of a highly-flexible
+%DDS device. As figure 1-2 shows, an N-bit variable-modulus counter and phase
+%
+%register are implemented in the circuit before the sine lookup table, as a replacement for the
+%address counter. The carry function allows this function as a “phase wheel” in the DDS
+%architecture. To understand this basic function, visualize the sinewave oscillation as a vector rotating around a phase circle (see Figure 1-3). Each designated point on the phase wheel
+%corresponds to the equivalent point on a cycle of a sine waveform. As the vector rotates around the wheel, visualize that a corresponding
+%output sinewave is being generated. One revolution of the vector around the phase wheel, at a
+%constant speed, results in one complete cycle of the output sinewave. The phase accumulator is
+%utilized to provide the equivalent of the vector’s linear rotation around the phase wheel. The
+%contents of the phase accumulator correspond to the points on the cycle of the output sinewave.
+%The number of discrete phase points contained in the “wheel” is determined by the resolution, N,
+%of the phase accumulator. The output of the phase accumulator is linear and cannot directly be used to generate a sinewave or any other waveform except a ramp. Therefore, a phase-toamplitude
+%lookup table is used to convert a truncated version of the phase accumulator’s
+%instantaneous output value into the sinewave amplitude information that is presented to the D/A
+%converter. Most DDS architectures exploit the symmetrical nature of a sinewave and utilize
+%mapping logic to synthesize a complete sinewave cycle from ¼ cycle of data from the phase
+%accumulator. The phase-to-amplitude lookup table generates all the necessary data by reading
+%forward then back through the lookup table.
 
 
-A arquitetura adotada para o TH é apresentada, em forma de diagrama em blocos, na Figura~\ref{fig:moduloanalogblockdiag}. A cadeia de processamento do TH é constituída de um filtro passa baixas (FPB) ou filtro de reconstrução (FR), um amplificador de frequência intermediária (AMP-IF), um míxer de conversão ascendente, um filtro de RF de banda passante (FBP), um amplificador de ganho variável (VGA), um sintetizador de PLL e um amplificador para o sinal da LO (AMP-LO). 
+
+
+A arquitetura adotada para o transmissor-heteródino é apresentada, em forma de diagrama em blocos, na Figura~\ref{fig:moduloanalogblockdiag}. A cadeia de processamento do TH é constituída de um filtro passa baixas (FPB) ou filtro de reconstrução (FR), um amplificador de frequência intermediária (AMP-IF), um míxer de conversão ascendente, um filtro de RF de banda passante (FBP), um amplificador de ganho variável (AGV), um sintetizador de PLL e um amplificador para o sinal da LO (AMP-LO). 
    
 \begin{figure}[!ht]%
 \centering
@@ -362,7 +362,7 @@ onde $f_{\min}$ e $f_{\max}$, são as componentes de frequências mínima e máxima,
 
 A representação da resposta em frequência do sinal na saída do FPB é apresentada na segunda ilustração, denominada de ``Saída do DAC filtrado".
 
-A terceira ilustração, denominada de``Saída do mixer", apresenta a a magnitude da resposta em frequência do sinal na saída do\emph{ mixer}. A saída do mixer é composta por três componentes espectrais, o sinal da LO e duas imagens do sinal transladado, centradas em 
+A terceira ilustração, denominada de``Saída do mixer", apresenta a magnitude da resposta em frequência do sinal na saída do\emph{ mixer}. A saída do mixer é composta por três componentes espectrais, o sinal da LO e duas imagens do sinal transladado, centradas em 
 %
 %em ma é apresentado Ainda na mesma Figura, pode-se observar que a saída do \emph{mixer}  é composta pelo sinal da LO, tipicamente uma onda contínua centrada na frequência $f_\textrm{LO}$, e  por duas componentes $\left|X^{RF}(f) \right|$ situadas em 
 \begin{align*}

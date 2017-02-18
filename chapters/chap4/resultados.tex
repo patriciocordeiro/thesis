@@ -30,16 +30,16 @@ O experimento 3 explora um caso prático que envolve um cenário real de transmiss
 Esta seção define o cenário no qual se enquadra a geração do SB-BB e SB-RF. O presente cenário constitui a base de todas os experimentos realizados, salvo quando alguma alteração nos parâmetros forem explicitamente informados. 
 Tem-se como alvo dois STMs: LTE-B5  e  GSM900, o que corresponde ao uso de $M=2$ na Figura~\ref{fig:jammerbasicdiag}. O objetivo é operar como BTM-Af, e transmitir o SB em todos os canais de DL, já que este, tipicamente, requer menos energia do que UL. 
 
-\begin{itemize}
-\item \textbf{ Parâmetros do LTE B5} - O LTE-B5 usa para o DL uma faixa de espectro compreendida entre $\fminRFLTE$-$\fmaxRFLTE$~MHz, o que corresponde a uma largura de banda total de $BW_{\text{LTE}}=\fBandLTE$~MHz, centrada em $f_{c_{\text{LTE}}}^{RF} =\fcRFLTE$, com $|{\cal K}|=\LTEsubportadorasrounded$ subportadoras, espaçadas de 
- $\Delta_f^{LTE}= \DFLTE$~kHz.
-  %entre as subportadoras, e o número total de subportadoras é   $|{\cal K}|=\LTEsubportadorasrounded$.
-
-\item \textbf{Parâmetros do GSM900} - O GSM900, usa para o DL uma faixa de espectro compreendida entre $\fminRFGSM$-$\fmaxRFGSM$~MHz, o que corresponde a uma largura de banda total de $BW_{\text{GSM}} = \fBandGSM$~MHz, centrada em $f_{c_{\text{GSM}}}^{RF} =\fcRFGSM$, com  $|{\cal K}|=\GSMsubportadorasrounded$ subportadoras, espaçadas de $\Delta_f^{GSM} =200$~kHz.
-%entre as subportadoras (canais), e o número total de subportadoras é  $|{\cal K}|=\GSMsubportadorasrounded$.
-
- %As frequências das subportadoras em RF  $f_c^{RF}$ variam de  e de 935.2-959.8~MHz, ambos com  incrementos de $\Delta_f$, para GSM850 e GSM900, respectivamente. 
-\end{itemize}
+%\begin{itemize}
+%\item \textbf{ Parâmetros do LTE B5} - O LTE-B5 usa para o DL uma faixa de espectro compreendida entre $\fminRFLTE$-$\fmaxRFLTE$~MHz, o que corresponde a uma largura de banda total de $BW_{\text{LTE}}=\fBandLTE$~MHz, centrada em $f_{c_{\text{LTE}}}^{RF} =\fcRFLTE$, com $|{\cal K}|=\LTEsubportadorasrounded$ subportadoras, espaçadas de 
+ %$\Delta_f^{LTE}= \DFLTE$~kHz.
+  %%entre as subportadoras, e o número total de subportadoras é   $|{\cal K}|=\LTEsubportadorasrounded$.
+%
+%\item \textbf{Parâmetros do GSM900} - O GSM900, usa para o DL uma faixa de espectro compreendida entre $\fminRFGSM$-$\fmaxRFGSM$~MHz, o que corresponde a uma largura de banda total de $BW_{\text{GSM}} = \fBandGSM$~MHz, centrada em $f_{c_{\text{GSM}}}^{RF} =\fcRFGSM$, com  $|{\cal K}|=\GSMsubportadorasrounded$ subportadoras, espaçadas de $\Delta_f^{GSM} =200$~kHz.
+%%entre as subportadoras (canais), e o número total de subportadoras é  $|{\cal K}|=\GSMsubportadorasrounded$.
+%
+ %%As frequências das subportadoras em RF  $f_c^{RF}$ variam de  e de 935.2-959.8~MHz, ambos com  incrementos de $\Delta_f$, para GSM850 e GSM900, respectivamente. 
+%\end{itemize}
 O resumo dos parâmetros dos canais físicos para ambos os sistemas é apresentado na Tabela~\ref{tab:sim_gsm_ch_specs}. 
 
 
@@ -186,14 +186,15 @@ N & $\NLTE$ &$\NGSM$\\ \hline
 \end{table}
 
 \section{Experimento 1: Resultados de Simulação em Matlab}
-Nesta seção são apresentados os resultados preliminares de simulações realizadas no ambiente Matlab para geração do SBD-BB. Esta etapa tem como objetivos: 1)
-%\begin{itemize}
-%\item 
+Nesta seção são apresentados os resultados preliminares de simulações realizadas no ambiente Matlab para geração do SBD-BB. Esta etapa tem como objetivos:
+
+ \begin{enumerate}
+\item 
 Analisar a influência da escolha de diferentes conjuntos de $\{\theta\}$ nos valores de PAPR e RSR; 
-%\item 
-2) Validar a expressão da RSR proposta na Subseção~\ref{subsec:rsr}, através do levantamento das RSRs para diferentes conjuntos de Multitom.
+\item 
+ Validar a expressão da RSR proposta na Subseção~\ref{subsec:rsr}, através do levantamento das RSRs para diferentes conjuntos de Multitom.
  %Para efeito de simplificação, foram realizadas simulações apenas para o LTE-B5, porém, os mesmos procedimentos se aplicam ao GSM900.
-%\end{itemize}
+\end{enumerate}
 %O procedimento da simulação consistiu em gerar e quantizar o SBD-BB para diferentes conjuntos de Multitons. Em seguida, calcular e comparar suas RSRs com a teórica, apresentada na Equação~\ref{subsec:rsr}.
 %%Para tal, foram levantadas a RSR para diferentes conjuntos de soma de senoides, os quais foram comparadas com a RSR teórica. 
 %
@@ -211,12 +212,12 @@ A computação do SBD-BB se deu através da Equação~\eqref{eq:sumsenoide}, com $A=1
 
 Resultados da primeira etapa, com o conjunto $\{\theta\}=0$, são apresentados na Figura~\ref{fig:SB_BBtempofreqNormal}.
 %,  onde o SBD-BB no domínio do tempo e frequência são dispostos nas Figuras superior e inferior, respectivamente.
-Onde observa-se que o sinal no domínio do tempo (\textbf{parte superior da Figura}) apresenta altos picos em relação à média, principalmente nas duas extremidades. Como resultado, obteve-se um valor alto do PAPR, aproximadamente 10~dB. No domínio da frequência, o resultado é uma PSD altamente distorcida (\textbf{parte inferior da Figura}), dentro e fora da banda de interesse.
+Onde observa-se que o sinal no domínio do tempo (\textbf{parte superior da Figura}) apresenta altos picos em relação à média nas duas extremidades. Como resultado, obteve-se um valor alto do PAPR, aproximadamente 10~dB. No domínio da frequência, o resultado é uma PSD altamente distorcida (\textbf{parte inferior da Figura}), dentro e fora da banda de interesse.
 %PT: A FIGURA ABAIXO SERIA DO PRIMEIRO CASO, THETA=0. ESTOU APENAS MARCANDO ESPAÇO.
 \begin{figure}[!ht]%
 \centering
 \includegraphics[width=0.75\columnwidth]{./figure/SB_BB_tempo_freq_Normal}%
-\caption{Resultado do SBD-BB computado com todos os valores do conjunto $\{\theta\} =0$. \textbf{superior}) Sinal no domínio do tempo. \textbf{inferior}) Sua magnitude da resposta em frequência.} %
+\caption{Resultado do SBD-BB computado com todos os valores do conjunto $\{\theta\} =0$. \textbf{Superior}: Sinal no domínio do tempo. \textbf{Inferior}: Sua magnitude da resposta em frequência.} %
 \label{fig:SB_BBtempofreqNormal}%
 \end{figure}
 
@@ -238,11 +239,11 @@ Na Figura~\ref{fig:RSRSumsineTeormeasNormal} são apresentados os resultados comp
 \begin{figure}[!ht]%
 \centering
 \includegraphics[width=0.73\columnwidth]{./figure/RSR_Sumsine_Teor_meas_Normal}%
-\caption{Comparação das características estimadas do SBD-BB com as teóricas (para $|{\cal K}|=0$ até $|{\cal K}|=\LTEsubportadorasrounded$), computados com todos os valores do conjunto $\{\theta\} =0$: \textbf{superior})  Potência do sinal. \textbf{médio})  Potência do erro de quantização. \textbf{inferior}) RSR.}%
+\caption{Comparação das características estimadas do SBD-BB com as teóricas (para $|{\cal K}|=0$ até $|{\cal K}|=\LTEsubportadorasrounded$), computados com todos os valores do conjunto $\{\theta\} =0$: \textbf{Superior}:  Potência do sinal. \textbf{Meio}:  Potência do erro de quantização. \textbf{Inferior}: RSR.}%
 \label{fig:RSRSumsineTeormeasNormal}%
 \end{figure}
 
-Para o segundo caso, tomou-se um conjunto de valores de $\{{\theta}\}$ uniformemente distribuídos de $[-\pi,\pi]$. Para garantir que a faixa dinâmica do sinal fique contido entre $[-3 \sigma,3 \sigma]$, são executadas várias realizações com diferentes conjuntos de valores de $\theta$, para cada conjunto de Multitons. Em seguida são escolhidos os sinais resultantes com menor amplitude.
+Para o segundo caso, tomou-se um conjunto de valores de $\{{\theta}\}$ aleatórios, uniformemente distribuídos de $[-\pi,\pi]$. Para garantir que a faixa dinâmica do sinal fique contido entre $[-3 \sigma,3 \sigma]$, são executadas várias realizações com diferentes conjuntos de valores de $\theta$, para cada conjunto de Multitons. Em seguida são escolhidos os sinais resultantes com menor amplitude.
 %
 %devem foi escolhido de tal forma que $y[n]\in[-3 \sigma,3 \sigma]$ e a sobrecarga (\emph{overload}) é evitado com um  quantizador de $b$-bits projetado para esta faixa dinâmica. o qual foi apresentado na Seção(). A seleção do conjunto de valores para $\theta$ se deu por ``força bruta", ou seja, várias realizações são executadas para um mesmo conjunto de senoides tomando valores de  $\theta$ aleatórios e uniformemente distribuídos de $[-\pi,\pi]$ e, em seguida seleciona-se  os valores 
 %
@@ -257,7 +258,7 @@ O SBD-BB resultante, no domínio do tempo e a sua magnitude da resposta em frequê
 \begin{figure}[!ht]%
 \centering
 \includegraphics[width=0.75\columnwidth]{./figure/SB_BB_tempo_freq}%
-\caption{Resultado do SBD-BB computado com com os valores do conjunto $\{{\theta}\}$ uniformemente distribuídos de $[-\pi,\pi]$. \textbf{superior}) Sinal no domínio do tempo. \textbf{inferior}) Sua magnitude da resposta em frequência.} %
+\caption{Resultado do SBD-BB computado com com os valores do conjunto $\{{\theta}\}$ uniformemente distribuídos de $[-\pi,\pi]$. \textbf{Superior}: Sinal no domínio do tempo. \textbf{Inferior}: Sua magnitude da resposta em frequência.} %
 \label{fig:SB_BB_tempo_freq}%
 \end{figure}
 
@@ -273,7 +274,7 @@ Na Figura~\ref{fig:SBBBhistograma} é apresentado o histograma do SBD-BB para $|{
 \begin{figure}[!ht]%
 \centering
 \includegraphics[width=0.73\columnwidth]{./figure/RSR_Sumsine_Teor_meas}%
-\caption{Comparação das características estimadas do SBD-BB com as teóricas (para $|{\cal K}|=0$ até $|{\cal K}|=\LTEsubportadorasrounded$), computados com os valores do conjunto $\{{\theta}\}$ uniformemente distribuídos de $[-\pi,\pi]$: \textbf{superior})  Potência do sinal. \textbf{médio})  Potência do erro de quantização. \textbf{inferior}) RSR.}%
+\caption{Comparação das características estimadas do SBD-BB com as teóricas (para $|{\cal K}|=0$ até $|{\cal K}|=\LTEsubportadorasrounded$), computados com os valores do conjunto $\{{\theta}\}$ uniformemente distribuídos de $[-\pi,\pi]$: \textbf{Superior}:  Potência do sinal. \textbf{Meio}:  Potência do erro de quantização. \textbf{Inferior}: RSR.}%
 \label{fig:RSRSumsineTeormeas}%
 \end{figure}
 
@@ -284,7 +285,7 @@ Nesta seção são apresentados resultados de implementação prática da geração do  
 %Esta etapa apresenta resultados de implementação prática do módulo digital apresentado na Seção~\ref{sec:uld}, aplicado na geração do SB em banda base. O objetivo é de validar a arquitetura da ULD proposta e a metodologia de projeto associada. Para isso, obteve-se um protótipo com a ULD implementada no FPGA EP3C120F780C7 do kit de desenvolvimento da Altera Cyclone III DSP \cite{AlteraCIIDSP} conectado a placa de avaliação do DAC5681 da texas instruments \cite{tiDad5681evm} Figura(FOTO do Setup).
 Os experimentos foram realizados com o protótipo da BTM apresentado na Seção \ref{sec:prototipo}.
 
-O projeto de hardware do FPGA para a ULD foi desenvolvido no software da Altera, Quartus II e o esquemático do nível mais alto (Top level)  é apresentado na Figura~\ref{fig:FPGATopLevel}. 
+O projeto de hardware do FPGA para a ULD foi implementado no Quartus II e o HDL/esquemático do nível mais alto (Top level)  é apresentado na Figura~\ref{fig:FPGATopLevel}. 
 %Tal esquemático segue o mesmo fluxo da arquitetura o diagrama em blocos da arquitetura da ULD apresentada na Seção~\ref{sec:uld}.
 
 \begin{figure}[!ht]%
@@ -321,14 +322,14 @@ O arcabouço experimental é apresentado na Figura~\ref{fig:Setupexp}, onde o prot
 \label{fig:Setupexp}%
 \end{figure}
 
-O programa para a geração do sinal é carregado no FPGA da ULD,  que gera e transmite de forma contínua as amostras digitas para o DAC. Em seguida, o SB-BB, na saída do DAC, é enviado para a placa do TH, que o converte e gera o SB-RF. Em seguida o SB-RF é enviado para o analisador do espectro para análise. 
+O programa para a geração do sinal é carregado no FPGA da ULD,  que gera e transmite de forma contínua as amostras digitais para o DAC. Em seguida, o SB-BB, na saída do DAC, é enviado para a placa do TH, que o converte e gera o SB-RF. Em seguida o SB-RF é enviado para o analisador do espectro para análise. 
 
 Desta forma, primeiramente foi realizada a análise do SB-BB e em seguida do SB-RF.
 
 A PSD capturada no analisador de espectro dos SB-BBs, na saída do DAC filtrado (com destaque em quatro canais),  para o LTE-B5 e GSM900 são apresentadas na Figuras~\ref{fig:LTEB5BBPSD}~e~\ref{fig:GSM900BBPSD}, respectivamente. 
 %mostra a PSD da $x^{BB}(t)$  do SB gerado para a banda GSM900 como .
 Como esperado, a PSD de ruído medido do DC para $F_s/2$ é aproximadamente plana para ambos os SB-BBs. Para o LTE, a PSD do ruído medido foi ${\cal N}_0 \approx \PnoisedBmHzLTE$~dBm/Hz, o que corresponde a uma potência total de ruído  de  $\approx \roundNoisedBmLTE$~dBm/$\fsdivdois$~MHz. A potência medida do sinal foi de $\approx \PsdBmLTE$~dBm/$\fBandLTE$~MHz, isso resulta em uma 
-$\text{RSR}_q\approx \RSRLTE$~dB, que é aproximadamente igual a $\text{RSR}_q$ especificada. 
+$\text{RSR}_q\approx \RSRLTE$~dB, que é aproximadamente igual a $\text{RSR}_q$ especificada pela equação \eqref{eq:SNR_db}. 
 
 \begin{figure}[!ht]%
 \centering
@@ -338,7 +339,7 @@ $\text{RSR}_q\approx \RSRLTE$~dB, que é aproximadamente igual a $\text{RSR}_q$ e
 \end{figure}
 
 No caso do GSM, a PSD do ruído medido foi ${\cal N}_0 \approx \PnoisedBmHzGSM$~dBm/Hz, o que corresponde a uma potência de ruído total de $\approx \roundNoisedBmGSM$~dBm/$\fsdivdois$~MHz. A potência medida do sinal foi de $\approx \PsdBmGSM$~dBm/$\fBandGSM$~MHz, isso resulta em uma 
-$\text{RSR}_q\approx~\RSRGSM$~dB, que também é  aproximadamente igual a $\text{RSR}_q$ especificada.
+$\text{RSR}_q\approx~\RSRGSM$~dB, que também é  aproximadamente igual a $\text{RSR}_q$ especificada pela equação \eqref{eq:SNR_db}.
 \begin{figure}[!ht]%?
 \centering
 \includegraphics[width=0.8\columnwidth]{./figure/GSM900_BB_PSD_v1}%
@@ -402,7 +403,7 @@ O experimento consiste em gerar e transmitir um sinal de LTE na direção DL com l
 %Para o GSM foi gerado o sinal para um único canal de 200~kHz centrado em x~MHz(DL).
 
 \item \textbf{Transmissão e recepção} - A transmissão do sinal se deu através de uma antena VERT900 (para aplicações de 900~MHz) conectada ao gerador. No outro lado, o analisador de espectro funcionou como um receptor, capturando o sinal também através de uma antena VERT900. A decodificação do sinal é realizada no software de análise VSA instalado no próprio analisador de espectro.
-Devido à baixa potência de transmissão envolvida, as antenas do transmissor e do receptor foram posicionadas próximas o suficiente para permitir a decodificação do sinal do LTE na ausência do SB. Já a posição do BTM foi determinada empiricamente, e este foi posicionado um pouco afastado do receptor.
+Devido à baixa potência de transmissão envolvida, o que pode imposibilitar a decodificação do sinal, mesmo na ausência do sinal de bloqueio, as antenas do transmissor e do receptor foram posicionadas próximas o suficiente para permitir a decodificação do sinal do LTE na ausência do SB. Já a posição do BTM foi determinada empiricamente, e este foi posicionado à, aproximadamente, uns 2 metros de distância do receptor.
 
 \item \textbf{Resultados} - A realização do experimento se deu em duas etapas: Na primeira etapa, apenas o sinal do LTE foi transmitido e o SB foi desligado. Já na segunda etapa ambos os sinais foram transmitidos e recebidos ao mesmo tempo.
 
