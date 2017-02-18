@@ -1,0 +1,136 @@
+%\documentclass[11pt]{article}
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+%\usepackage{amsmath}
+%
+%
+%\title{Classificação de Tecnologia de acesso utlizando \emph{software} Weka}
+%\author{Vitória Souza}
+%\date{\today}
+%\usepackage{graphicx}
+%\begin{document}
+%\maketitle
+%\section{Weka}
+%\chapter{Classificação de Tecnologia de acesso utlizando \emph{software} Weka}
+\chapter{Classificação de Tecnologia de Acesso via Rádio Utlizando Weka}
+\section{Introdução}
+Neste trabalho foi utilizado o \emph{software} livre Weka, o qual é uma coleção de algoritmos de ap
+rendizado de máquina feitos em linguagem de programação Java, com o objetivo de executar tarefas de Mineração de Dados. 
+	
+	Este \emph{software} possui um conjunto de ferramentas de pré-processamento de dados, além de ferramentas de classificação, regressão, clusterização e associação. 
+
+	Utilizaremos esta aplicação no processo de classificação das \emph{Radio Access Technologies} (RAT).
+	
+
+
+\section{Base de Sinais de Tecnologias de Rádio}
+
+Uma base de dados é um conjunto de exemplos (instâncias) descritos por um conjunto de atributos e usma classe de saída. Deste modo cada exemplo possui um conjunto de atributos (ou características) que definem perante a um classificador a sua classe.
+
+A base deste trabalho possui 532 instâncias, 13 atributos de entrada e um atributo de saída denominado classe. Os atributos de entrada são todos numéricos representam as \emph{power spectral densities} (PSD) de sinais gerados no \emph{software} System View, os atributos de saída (atributos classe) são as RAT, que podem ser \emph{Long Term Evolution} (LTE) ,\emph{Global System for Mobile} (GSM) ou \emph{ Wide-Band Code-Division Multiple Access} (WCDMA) .
+
+Deste modo o classificador criará um modelo que analize as PSDs e classifique o sinal em LTE, GSM ou WCDMA.
+
+
+\section{Classificação de Tecnologias de Acesso em Rádio utilizando Matlab  e Weka}
+	Qualquer processo de classificação pode ser dividido em duas etapas:
+	\begin{itemize}
+	\item Extração de características 
+	\item Algoritmo de classificação
+	\end{itemize}
+	Deste modo foi utlizado o software Matlab na extração de características e geração dos arquivos que serão utilizados pelo Weka na tarefa de classificação.
+	
+	\subsection{Extração de Características}
+	O software Matlab foi aplicado a tarefa de extrair os parâmetros de cada sinal. Ele cria três arquivos no formato ARFF que serão utilizados no Weka nas tarefas de treino, validação e teste do classificador.
+	Cada arquivo contém um cenário o qual é composto por um receptor e um subconjunto de RATs ou modulações definidos na simulação. 
+	Cada transmissor envia um sinal com uma RAT através do seu canal, na freqüência central especificada neste cenário específico, a saída é o envelope complexo de um sinal multiplexado representando a banda $BW_{IF}$.
+	
+	 Este sinal é então convertido no domínio da freqüência através do algoritmo de estimação pwelch  da PSD e escrito em arquivos binários.
+	 
+	
+	Sintonizando a frequência de um LO, elas podem corresponder a diferentes larguras de banda de RF. Cada cenário tem uma única descrição especificada . Cada cenário pode ter várias instâncias, cada instância é descrita por um arquivo .m 
+	
+	Assim os arquivos criados pelo Matlab possuem as PSDs das RATs na banda base e um rótulo identificando cada instância.
+	
+	
+	
+	\begin{figure}[htp]
+	\centering
+	\includegraphics[scale=1.00]{./figure/psd_gsmltecdma_1}
+	\caption{PSD dos sinais GSM LTE e WCDMA modulados em IF}
+	\label{}
+	\end{figure}
+
+
+	\newpage
+
+\subsection{Classificação de RAT utilizando Weka}
+% weka manual
+%The stratified cv paints a more realistic picture. The accuracy is around 64%. The kappa statistic measures the agreement of prediction with the true class -- 1.0 signifies complete agreement. The following error values are not very meaningful for classification tasks, however for regression tasks e.g. the root of the mean squared error per example would be a reasonable criterion. We will discuss the relation between confusion matrix and other measures in the text.
+
+%The confusion matrix is more commonly named contingency table. In our case we have two classes, and therefore a 2x2 confusion matrix, the matrix could be arbitrarily large. The number of correctly classified instances is the sum of diagonals in the matrix; all others are incorrectly classified (class "a" gets misclassified as "b" exactly twice, and class "b" gets misclassified as "a" three times).
+
+%The True Positive (TP) rate is the proportion of examples which were classified as class x, among all examples which truly have class x, i.e. how much part of the class was captured. It is equivalent to Recall. In the confusion matrix, this is the diagonal element divided by the sum over the relevant row, i.e. 7/(7+2)=0.778 for class yes and 2/(3+2)=0.4 for class no in our example.
+
+%The False Positive (FP) rate is the proportion of examples which were classified as class x, but belong to a different class, among all examples which are not of class x. In the matrix, this is the column sum of class x minus the diagonal element, divided by the rows sums of all other classes; i.e. 3/5=0.6 for class yes and 2/9=0.222 for class no.
+
+%The Precision is the proportion of the examples which truly have class x among all those which were classified as class x. In the matrix, this is the diagonal element divided by the sum over the relevant column, i.e. 7/(7+3)=0.7 for class yes and 2/(2+2)=0.5 for class no.
+
+%The F-Measure is simply 2*Precision*Recall/(Precision+Recall), a combined measure for precision and recall.
+
+%These measures are useful for comparing classifiers. However, if more detailed information about the classifier's predictions are necessary, -p # outputs just the predictions for each test instance, along with a range of one-based attribute ids (0 for none). Let's look at the following example. We shall assume soybean-train.arff and soybean-test.arff have been constructed via weka.filters.supervised.instance.StratifiedRemoveFolds as in a previous example
+
+ 
+ Após criados nossos cenários e fornecidas as características, utilizamos os arquivos de teste, treinamento de validação descritos acima para produzir os seguintes resultados:
+ 
+ Os testes do Weka reportam o seguinte relatório ,mostrado nas figuras seguintes com as características dos testes feitos com o modelo obtido.
+
+Os primeiros parâmetros mostram quantas amostras foram corretamente classificadas, a estatística kappa o quanto ae c predição de classes é eficaz, um valor igual a 1, significa que a predição foi totalmente correta. Os fatores mean absolute error, root mean squared error e root relative squared error, mostram características estatísticas, ou seja a média absoluta dos erros, o erro médio quadrático e a raiz do quadrado do erro relativo de teste.
+ 
+ %The kappa statistic measures the agreement of prediction with the true class -- 1.0 signifies complete agreement.(weka manual 3.6.8)
+ 
+ 
+
+
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=1.00]{./figure/result1}
+\caption{Resultados obtidos no conjunto de teste do modelo criado pelo classificador.}
+\label{}
+\end{figure}
+
+
+O relatório inclui também testes de acurácia, onde temos os parâmetros TP (true positive) Rate mostra a proporção de exemplos corretamente classificados em uma classe x, ele é equivalente ao parâmetro recall,e pode ser calculado pela divisão do elemento da linha relevante pela diagonal principal. O fator FP (false positive) Rate nos mostra a proporção de elementos que foram classificados como a classe x, porém pertencem a outra e pode ser calculado com a ajuda da matriz de confusão, utilizando a soma dos elementos da classe x menos o elemento da matriz x na diagonal principal, dividio pela soma das linhas das outras classes. A precisão representa a proporção de exemplos de uma classe que foram classificadas corretamente sobre todos os outros exemplos, na matriz de confusão este elemento pode ser obtido dividindo-se o elemento da classe que está na diagonal principal, pela soma dos elementos nesta mesma coluna. O parâmetro F-Measure faz uma média combinada dos fatores precisão e recall e pode ser obtido pela seguinte fórmula $ (2* (\frac{Precision*Recall}{Precision+Recall}))$ .ROC Area explicita a área sob a curva ROC como a estatística de Wilcoxon-Mann-Whitney, como mostrado abaixo. 
+%http://weka.sourceforge.net/doc.dev/weka/classifiers/evaluation/ThresholdCurve.html
+
+
+ %The confusion matrix is more commonly named contingency table. In our
+%case we have two classes, and therefore a 2x2 confusion matrix, the matrix
+%could be arbitrarily large. The number of correctly classified instances is the
+%sum of diagonals in the matrix; all others are incorrectly classified (class ”a”
+%gets misclassified as ”b” exactly twice, and class ”b” gets misclassified as ”a”
+%three times).
+
+
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=1.00]{./figure/result2}
+\caption{Resultados de acurácia obtidos no teste do modelo criado.}
+\label{}
+\end{figure}
+
+
+A matriz de confunsão é uma matriz quadrada de ordem igual ao número de classes de saída, onde o número de amostras corretamente classificadas é igual a soma dos elementos da diagonal principal e as outras amostras  são elementos da classe coluna que foram classificados como coluna,como por exemplo na figura abaixo, 44 elementos  da classe GSM foram corretamente classificados, 19 elementos pertencentes a classe GSM, foram classificados como LTE e 1 elemento pertencente a GSM foi classificado como WCDMA (linha 1 da matriz de confusão abaixo).
+ 
+
+
+
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=1.00]{./figure/result3}
+\caption{Matriz de confusão de confusão obtida nos teste do modelo criado.}
+\label{}
+\end{figure}
+
+%
+%\end{document}

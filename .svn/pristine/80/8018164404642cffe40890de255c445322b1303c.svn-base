@@ -1,0 +1,34 @@
+\chapter*{Glossário}
+
+\noindent
+\begin{tabular}{l c p{.85\linewidth}}
+ALRT &-& \textit{Average Likelihood Ratio Test} \\%Teste Médio da Relação de Verossimilhança \\
+AM &-& \emph{Amplitude modulation}\\
+%ARBF &-& \emph{Adaptive Radial-Basis Function Networks}\\
+ARFF  &-& \emph{Attribute-Relation File Format}\\
+AWGN  &-& \emph{Additive White Gaussian Noise} \\
+BFSK &-& \emph{Binary Frequency Shift Keying}\\
+BPSK &-& \emph{Binary Phase Shift Keying}\\
+FAC &-& Função de Autocorrelação Cíclica\\
+FCC &-& \emph{Federal Communications Commission} \\
+FD &-&  Frequência Doppler \\
+FFT &-& \emph{Fast Fourier Transform}\\
+GLRT &-& \textit{Generalized Likelihood Ratio Test} \\%Teste Generalizado da Relação de Verossimilhança \\
+HLRT &-& \textit{Hybrid Likelihood Ratio Test} \\%Teste Híbrido da Relação de Verossimilhança \\
+%IBL &-& \emph{instance based learning}\\
+IEEE  &-& Instituto de Engenheiros Eletricistas e Eletrônicos \\
+KNN &-& \emph{K-Nearest Neighbor}\\
+MODOND &-& Modelo no domínio da forma de onda\\
+MODSIM &-& Modelo no domínio do símbolo\\
+PDF  &-& \emph{Probability density function}\\
+PSK &-& \emph{Phase Shift Keying}\\
+QAM &-& \emph{Quadrature Amplitude Modulation}\\
+QPSK &-& \emph{Quadrature Phase Shift Keying}\\
+RC &-& Rádio Cognitivo\\
+RNA &-& Rede Neural Artificial\\
+RSR  &-& Razão Sinal Ruído\\
+SVM &-& \emph{Support Vector Machine}\\
+%USRP &-& \emph{Universal Software Radio Peripheral}\\
+WEKA &-& \emph{Waikato Environment for Knowledge Analysis}\\
+\end{tabular}
+

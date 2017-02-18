@@ -1,0 +1,29 @@
+              % resumo
+
+\newpage
+
+\pagestyle{empty}
+
+\vspace*{2.0cm}
+
+\begin{center}
+ {\Huge \textbf{Resumo}}
+
+
+\end{center}
+
+
+\vspace*{1.4cm}
+
+\noindent
+A presente proposta consiste em pesquisar sistemas inovadores para bloqueio de sinais de telefonia celular. Novos algoritmos e arquiteturas, assim como técnicas de processamento digital de sinais no processo da geração do sinal de bloqueio em banda base, combinado com técnicas de processamento analógico e de rádio frequência para gerar a versão do mesmo em RF, são propostos e explorados em experimentos por simulação e práticos. 
+Está no escopo do trabalho gerar um protótipo que permita validar os algoritmos na prática.
+%
+%Explorar técnicas de processamento digital de sinais para fazer classificação de tecnologias de acesso via rádio, de maneira a permitir que o sistema de bloqueio seja flexível, inteligente e capaz de adaptar os seus parâmetros de geração e transmissão de acordo com a tecnologias de acesso alvo. 
+%o sensoriamento espectral e daí gerar o sinal de bloqueio em banda base, combinados com técnicas de processamento analógico e de rádio frequência para gerar a versão do mesmo em RF. 
+%Algoritmos e arquiteturas em hardware, baseados em FPGA, para o bloqueio de telefonia celular são propostos e validados em experimentos de geração de sinais de bloqueio e sua aplicação no bloqueio de sinais de telefonia celular. 
+Mais especificamente, são investigados bloqueadores do tipo A, os quais são dispositivos que visam interromper a comunicação entre um dispositivo móvel e sua estação de rádio base através da transmissão de um sinal de bloqueio nas mesmas frequências usadas pelos sistemas móveis para se comunicarem. Um protótipo baseado nos algoritmos e arquiteturas propostas, composto por uma unidade de lógica digital baseada em FPGA, o qual é flexível e reconfigurável, e um transmissor heteródino foram desenvolvido e devidamente testados em experimentos de geração do sinal de bloqueio em banda base e em RF, assim como sua aplicação em  bloqueio dos sinais de telefonia celular. Resultados preliminares mostraram a eficiência do protótipo na geração do sinal para bloqueio de dois sistemas de telefonia móvel: LTE e GSM. Por fim, como planejamento para a pesquisa futura é proposta a implementação de novos algoritmos de classificação automática de tecnologias de acesso via rádio e sua incorporação no sistema do bloqueador, com o objetivo de identificar a RAT atuante em uma determinada área do espectro em situações onde as faixas de espectro são compartilhadas e, assim, gerar o sinal de bloqueio de maneira otimizada, de acordo com a RAT.   
+
+\vspace{0.5cm}
+
+\noindent \textbf{PALAVRAS-CHAVES:} Bloqueadores de telefonia móvel, processamento de sinais, RAT, GSM, LTE, FPGA.

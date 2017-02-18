@@ -1,0 +1,26 @@
+
+                 % abstract
+
+\newpage
+
+\pagestyle{empty}
+
+
+\vspace*{2cm}
+
+\begin{center}
+ {\Huge \bf Abstract}
+\end{center}
+
+
+\vspace*{1.4cm}
+
+\noindent 
+This proposal consists of researching innovative systems for blocking cell phone signals. New algorithms and architectures, as well as techniques of digital signal processing in the process of generating the baseband blocking signal, combined with techniques for analog and radio frequency processing to generate its RF version, are proposed and explored in simulation and practical experiments .
+Is in the scope of work to generate a prototype that allows to validate the algorithms in practice.
+More specifically, type A jammers, which are devices that aim to disrupt communication between a mobile device and a radio base station by transmitting an RF signal in the same frequencies used by mobile systems to communicate are investigated. A prototype based on the proposed algorithms and architectures, consisting of an FPGA-based digital logic unit, which is flexible, reconfigurable, and an heterodyne-transmitter were developed and properly tested in experiments to generate the jamming signal in baseband and RF as well as its application in jamming mobile phone signals. Preliminary results show the efficiency of the prototype on generating signals for jamming two mobile phones: GSM and LTE. Finally, as planning for future research we propose implementation of new algorithms for automatic classification of radio access technologies and their incorporation in the jamming system, with the goal of identifying the active RAT  in a particular area of the spectrum in situations of spectrum sharing and thus generate a jamming signal in a an optimized way according with the RAT.
+
+
+\vspace{0.5cm}
+
+\noindent \textbf{KEYWORDS:} Mobile Jammers, Signal Processing, RAT, GSM, LTE, FPGA.

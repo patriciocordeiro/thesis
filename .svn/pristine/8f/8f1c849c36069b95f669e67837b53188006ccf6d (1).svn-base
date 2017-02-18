@@ -1,0 +1,543 @@
+\chapter{Sistema Proposto para Bloqueio de Telefonia Móvel}
+%\chapter{Sistema de Bloqueio de Telefonia Móvel: Algoritmos Eficientes Baseados em PDS e RF para Bloqueio de Sistemas GSM e LTE}
+%\section{Introdução}
+Neste capítulo é apresentado o estágio atual da tese através da descrição de um sistema proposto para BTMs do tipo ``Af". Este sistema combina técnicas de PDS e PAD para gerar e transmitir o SB ininterruptamente e bloquear a comunicação dos SMs alvos.
+
+Resgatando o já discutido, devido ao ritmo acelerado e à introdução contínua de novas tecnologias de acesso via rádio (RAT),
+% em inglês radio access technology), 
+o processamento analógico tem a desvantagem de fornecer menor flexibilidade, quando comparado com o processamento digital. 
+%De facto, em contraste com a sua atual importância para a sociedade, tem havido relativamente poucos trabalhos acadêmicos relativas a BTM's. 
+Assim, o sistema BTM proposto, combina  técnicas de PDS e PAS para constituir um sistema simples, eficaz e de relativo baixo custo. A parte do sistema proposto já desenvolvida implementa dois blocos: Um bloco é a unidade de lógica digital, responsável pela geração do sinal de bloqueio digital em banda base (SDB-BB), e um bloco analógico de transmissor-heteródino, responsável pela transladação em frequência, filtragem amplificação e transmissão do sinal de BTM.
+
+O terceiro bloco é o de RATc e está em desenvolvimento, não tendo ainda sido incorporado ao protótipo. Serão apresentados aqui resultados preliminares do mesmo e almeja-se ao final
+da tese integrá-lo ao protótipo para fins de validação e testes de desempenho.
+
+%Neste trabalho, propomos uma arquitetura digital baseada em FPGA para gerar a versão banda-base do SB.
+
+\section{Modelagem e Protótipo do Sistema Proposto}
+Um diagrama em blocos simplificado do sistema de BTM para bloqueio de múltiplas bandas é apresentado na Figura~\ref{fig:jammerbasicdiag}.  O protótipo desenvolvido para esta
+tese adota essa arquitetura, mas a discussão será feita de forma mais genérica para indicar
+outras possibilidades. Quando necessário será indicado o que foi efetivamente usado no
+protótipo.
+
+
+\begin{figure}[h!]%
+\includegraphics[width=\columnwidth]{./figure/jammer_basic_diag}%
+\caption{Diagrama em blocos simplificado do sistema BTM.}%
+\label{fig:jammerbasicdiag}%
+\end{figure}
+O sistema é  basicamente composto por um módulo digital, um módulo analógico e um estágio de potência. 
+
+O módulo digital implementa uma ULD, responsável pela geração do enésimo sinal digital $x_M[n]$ para o enésimo canal do BTM.
+
+O enésimo sinal digital $x_i[n]$ é convertido para o sinal de tempo contnuo ${{x^{\textrm{BB}}_i(t)}}$ pelo DAC (\emph{digital to analog converter}, ou conversor de digital para analógico) \nomenclature{DAC}{Digital to Analog Converter}.
+
+
+%, filtrado e transladado para a RF desejada, mediante o bloco de \emph{conversão em frequência} e em seguida amplificada. Geralmmente o sinal transmitido ${{x^{\textrm{RF}}_i(t)}}$ deve respeitar regulamentos específicos impostas pelo governo, como a densidade espectral de potência (PSD) máscaras que limitam as emissões fora da banda, e suas características dependem de toda a cadeia de processamento. 
+%O módulo digital é responsável por gerar o sinal digital $\xnbb$ em banda base , o qual é convertido para o sinal de tempo contínuo $\xtbb$, mediante o conversor de digital para analógico (DAC). 
+
+O sinal na saída do DAC alimenta a entrada do módulo analógico que o translada, a partir da banda-base para uma frequência de rádio (RF), e  gera o sinal $\xtrf$, o qual é amplificado no estágio de potência e enviado para uma antena para transmissão.  
+
+Se o BTM deve operar em bandas de frequências contíguas, pode ser benéfico usar um único $\xnbb$. Porém, em outras situações, tais como quando se deseja bloquear múltiplas RATs, pode ser vantajoso usar  $M$ DACs e $M$ módulos analógicos como indicado na Figura~\ref{fig:jammerbasicdiag}.
+ 
+%Este trabalho se concentra exclusivamente nos sinais de banda base $\xnbb$ e $\xtbb$ que herdam as especificações de $\xtrf$, tais como máscaras de transmissão que limitam as emissões fora da faixa necessária. 
+
+%O módulo analógico recebe o sinal do DAC e gera o sinal  $\xtrf$, que é uma versão transladada em frequência do sinal $\xtbb$.
+Nas duas próximas seções serão apresentados e descritos, com algum detalhe, as arquiteturas e seus principais componentes para a ULD e o transmissor-heteródino.
+
+\section{Metodologia Proposta para Geração do Sinal em Banda Base} \label{sec:uld}
+Nesta seção é proposta uma arquitetura da ULD baseada em FPGA para a geração SBD-BB, $x[n]$. O objetivo da ULD é de gerar o sinal digital $\xnbb$, através do uso de técnicas eficientes de processamento digital de sinais.
+
+Nos últimos anos, FPGA's  se tornaram uma solução atraente para implementar sistemas de processamento digital de sinais
+%~\cite{alteraFPGA06}.
+Dispositivos FPGAs consistem basicamente de componentes lógicos programáveis, portas lógicas e blocos de memória que podem ser configurados para operar em modos diferentes e implementar computações digitais complexas. FPGAs provêm uma arquitetura reconfigurável, programado via hardware mediante uma linguagem de descrição de hardware (HDL), \nomenclature{HDL}{Hardware Description Language} o que possibilita sua reconfiguração para aplicações específicas, mesmo depois da instalação no campo. A natureza de processamento paralelo dos FPGAs possibilita a implementação em hardware de aplicações complexas e que exigem altas taxas de amostragem e de transmissão de dados.  
+Esta flexibilidade é a principal vantagem do FPGA em relação aos chips DSP's~\cite{bdti02}.
+
+ %outro lado, pode ser mais difícil mapear aplicações em FPGA do que em chips DSP. Por exemplo, quando uma linguagem de descrição de hardware (HDL) é exigida para programar o FPGA, a tarefa é tipicamente considerada mais difícil que programar um DSP em C.  Para reduzir esta desvantagem, fabricantes de FPGA desenvolveram recentemente ferramentas de desenvolvimento como o \textit{DSP Builder} da Altera, para programar o FPGA através de um fluxo de software que não requer aprendizagem da HDL. 
+
+A geração do sinal digital $x[n]$ pode se beneficiar do paralelismo e taxas de amostragem altas oferecidos por FPGAs. Ainda, a possibilidade de reconfiguração oferece uma flexibilidade para alterar em tempo real a localização das portadoras e a largura de banda cobertas pelo SB do BTM.  
+
+Na Figura~\ref{fig:uld} é apresentada uma  arquitetura  para a ULD baseado em FPGA. 
+%Esta arquitetura é baseada em processamento \emph{off-line} complementado com processamento \emph{online}. O processamento \emph{off-line} consiste na pre-computação das amostras de $y[n]$ para pós-processamento. 
+A arquitetura é relativamente simples, composta por um PLL (\emph{phase locked loop})\nomenclature{PLL}{Phase Locked Loop}, $M$ ROMs (\emph{read-only memory})\nomenclature{ROM}{Read-Only Memory} e $M$ contadores. O PLL gera o \emph{clock} do sistema através de um \emph{clock}  de referência externa e a frequência do clock gerado é controlado digitalmente. Cada ROM armazena as amostras de cada sinal $y_M[n]$ pré-computadas.  O contador interage sobre os endereços da ROM e as amostras são continuamente enviadas ao DAC. 
+%, como sugerido pela Equação~(\ref{eq:x}). O 
+ 
+\begin{figure}[h!]%
+\centering
+\includegraphics[width=0.8\columnwidth]{./figure/unidade_logica_digital}%
+\caption{ULD baseado em FPGA para geração do SBD-BB, $\xnbb$.}%
+\label{fig:uld}%
+\end{figure}
+%
+ %
+%arquitetura proposta é apresentada na Figura \ref{fig:jammergeneralarrayblock} e é composta 
+%basicamente por uma \emph{unidade de lógica digital} (ULD)  que pode ser, por exemplo, um FPGA, complementado por conversores de digital para analógico (DAC), mixers de frequência,  amplificadores e antenas, os quais estão organizados em $M$ canais.
+%
+%
+%\begin{figure}[h!]%
+%\includegraphics[width=\columnwidth]{./figure/jammer_general_array_block}%
+%\caption{Basic jammer systrem blocks.}%
+%\label{fig:jammergeneralarrayblock}%
+%\end{figure}
+
+%
+%\begin{figure}[h]%
+%\includegraphics[width=\columnwidth]{./figure/mixer_upconversion}%
+%\caption{}%
+%\label{fig:mixer_up}%
+%\end{figure}
+
+O método proposto utiliza o processamento \emph{off-line} para pré-computar um segmento 
+$y[n]$  com $N$ amostras de $b$ bits cada e gerar o sinal $\xnbb$ pela repetição de $y[n]$. Matematicamente  $\xnbb$ é expresso como:
+\begin{equation}
+\xnbb = \sum_{m=-\infty}^\infty y[n-mN]
+\label{eq:xnbb}
+\end{equation}
+Desta forma, a transformada discreta de Fourier (TDF) \nomenclature{TDF}{Transformada Discreta de Fourier} de $\xnbb$ é dada por 
+\begin{equation}
+X(e^{j \omega}) = \frac{1}{2\pi}Y(e^{j \omega}) P(e^{j \omega}),
+\label{eq:fftx}
+\end{equation}
+onde 
+\begin{equation}
+P(e^{j \omega}) = \sum_{k=-\infty}^\infty \delta(\omega-k \Delta_{\omega})
+\label{eq:fftp}
+\end{equation}
+com $\Delta_{\omega} = \frac{2 \pi}{N}$.
+Assim, apenas as frequências múltiplas de $\Delta_{\omega}$ podem ser efetivamente usadas.
+
+Assumindo que o DAC opera com $F_s$ amostras por segundo (APS)\nomenclature{APS}{Amostras por Segundo}, $\Delta_{\omega}$ em radianos corresponde a uma resolução em frequência $\Delta_{f} = F_s \Delta_{\omega} / (2\pi) = F_s/N$~Hz, de tal forma que uma componente de $\xnbb$ com frequência $k \Delta_{\omega}$ corresponda a $k \Delta_{f}$ em $\xtbb$. A resolução $\Delta_{f}$ (ou equivalentemente, $F_s$ e $N$) têm que ser escolhidos de acordo com a RAT alvo, as quais são representadas pelo conjunto de subportadoras $\{f_c^{RF}\}$.
+
+%Para sistemas multiportadoras, como por exemplo, GSM e LTE, o objetivo é projetar $y[n]$ de tal modo que pelo menos uma das suas componentes frequências caia dentro de cada canal RAT de interesse, com potência suficiente para interromper a comunicação. 
+
+A questão se resume em definir o sinal $y[n]$ de tal forma que suas características permitam um bloqueio eficiente dos canais de comunicação dos SMs alvos. 
+
+Como apresentado nas Subseções \ref{sec:gsm} e \ref{sec:lte}, fisicamente, no domínio da frequência, os canais de comunicação dos sistemas apresentados são divididos em subportadoras espaçadas de $\Delta_f$, as quais são responsáveis pelo transporte da informação. %voz e dos dados.
+%Para BTM's do tipo A, a existência de outras estratégias de multiplexação que não sejam por divisão de freqüência (FDM, em ingles \emph{frequency-division multiplex}) é irrelevante. Por exemplo, mesmo que a comunicação ocorra em \textit{timeslots}, o SB da BTM é gerado ininterruptamente. Assim, um canal de comunicação é representado aqui pela sua largura de banda $B_c$ e freqüência central $f_c$. Por exemplo, nos sistemas GSM, $B_c=200$~kHz e $f_c=935.2$~MHz para
+%o $1^o$ ARFCN do canal de downlink em implementações típicas de 900~MHz. 
+Assim, um passo fundamental do processo é projetar $y[n]$ de tal modo que pelo menos uma das suas componentes frequências caia dentro de cada subportadora do RAT de interesse, com potência suficiente para interromper a comunicação. Para simplificar, supõe-se aqui que um componente de frequência de $y[n]$ é criada para cada subportadora $\{f_c^{RF}\}$. Com este objetivo, um conjunto $\cal K$ de senóides com frequências múltiplas de $\Delta_{\omega}$ é selecionado e 
+$y[n]$ é dado por
+\begin{equation}
+y[n]= \sum_{k \in \cal K} {\cos(k \Delta_{\omega}  n + \theta_k)},
+\label{eq:sumsenoide}
+\end{equation}
+onde $\theta_k$ é a fase em radianos.
+
+O sistema digital descrito tem vantagens sobre os analógicos, sendo as principais delas a flexibilidade de reconfiguração, em tempo real, da largura de banda e da localização no espectro do  SB-BB. O procedimento é realizado de forma simples, através da atualização do conteúdo da ROM, mesmo depois da instalação do BTM em campo. Isso significa que, ao contrário da maioria dos sistemas BTM's analógicos, neste sistema o usuário pode controlar, em tempo real, as bandas de frequências para cobrir e a largura de banda associada sem qualquer alteração no hardware do sistema.  
+%é uma fase aleatória que evita  a high peak-to-average power ratio (PAPR)~\cite{Nikookar2002}.
+%\section{Aspectos a considerar na geração do sinal em banda base}
+
+Uma importante tarefa no projeto de $y[n]$ é manter o ruído de quantização em
+níveis toleráveis ou pré-especificados. Esta questão é relacionada a controlar 
+o uso dos níveis de quantização do DAC, em especial a razão entre o pico e a
+média do sinal. Essas questões serão discutidas a seguir.
+
+
+\subsection{\emph{Peak-to-Average Power Ratio } para sinais compostos por soma de de senoides} \label{sec:papr}
+Embora a geração do sinal $y[n]$ na Equação~\ref{eq:sumsenoide} seja relativamente simples, esta apresenta um desafio: Um potencial alto PAPR resultante da soma de amostras com altas  amplitudes de senoides com frequências diferentes em um determinado instante de tempo. PAPR é uma medida da razão entre o máximo do módulo do sinal ao quadrado e sua potência média. Para o sinal $y[n]$, o PAPR é expresso matematicamente como
+\begin{equation}
+\text{PAPR} = \frac{\max \{|y[n]|^2\}}{E \left[|y[n]|^2\right]}
+\label{eq:papr}
+\end{equation}
+onde $E[.]$ denota o operador do valor esperado.
+
+
+%When samples with high amplitudes of  different sinusoid are aligned in time, the sum of this sinusoid may result in a signal envelope with high peak at that specific time. Such high peaks will lead to a high PAPR, which is a measure of the maximum instantaneous power to the average power of the signal. In discrete time the PAPR is expressed as 
+
+
+No domínio discreto, valores altos de PAPR podem aumentar o ruído de quantização devido ao processo de arredondamento envolvido. Este problema pode ser contornado  com o aumento de número de bits para representar o sinal, porém, isso exige mais hardware do FPGA e também um DAC com maior resolução e, portanto, mais custosos. Por outro lado, no domínio do tempo contínuo, um alto PAPR é potencialmente prejudicial aos amplificadores de potência (PAs) dos transmissores de RF, os quais são geralmente lineares apenas dentro de uma faixa dinâmica limitada. Assim, um sinal com alto PAPR produzirá excursões do sinal na região de operação não-linear do amplificador de potência e, consequentemente, poderá sofrer distorções não-lineares causadas por \emph{clipping}. Isto dá origem a emissões espúrias fora da banda e a distorção do sinal dentro da banda \cite{Rahmatallah2013}. 
+%Para evitar essa distorção, os PAs teriam que operar com uma alta potência de \emph{back-offs- PT-O QUE SIGNIFICA}, levando a amplificação ineficiente ou transmissores caros.
+%
+%Além disso, no domínio do tempo contínuo, valores altos de PAPR produzirá excursões de sinal na região de operação não-linear do amplificador de potência (AP) no transmissor, levando a distorções não-lineares e espalhamento espectral. 
+
+Várias técnicas foram apresentadas na literatura para combater altos PAPR \cite{Rahmatallah2013}. Entretanto, um método simples e eficaz é basedo no uso de uma fase aleatória \cite{Nikookar2002} e pode diminuir significativamente o PAPR, sem adicionar muita complexidade ao sistema. Tal método baseia-se em tomar valores aleatórios, uniformemente distribuídos para a fase $\theta$, a fim de evitar o alinhamento no tempo das amostras com altos valores de amplitude. Este método é adotado neste trabalho.
+
+%\subsection{Razão sinal-ruído para sinais compostos por soma de senoides} \label{subsec:snr}
+\subsection{Razão sinal-ruído para sinais multitom} \label{subsec:rsr}
+%Quando se trata da geração de sinais em banda base por processamento digital de sinais.
+%No contexto de gerar sinais analógicos pela conversão de  sinais digitais   
+%PT: MELHORAR ESTA INTRODUCAO
+Ao gerar o SB-BB, podemos considerar duas fontes principais de ruído: O primeiro é o chamado ruído térmico, derivado da eletrônica do sistema, o qual tem uma densidade espectral de potência aproximadamente constante ao longo de todo o espectro (ruído branco). A segunda provem do DAC, como ruído de quantização e ruídos da distorção harmônica. Assumindo que a potência média do ruído térmico é muito menor que os ruídos provenientes do DAC, estes últimos então se tornam os principais limitantes do desempenho do sistema. 
+%Desta forma, em banda-base, as emissões espectrais são basicamente dependentes dos parâmetros do DAC. 
+Por isso, atenção especial deve ser tomada ao selecionar um DAC para atender às especificações em relação ao ruído de quantização, distorção harmônica, faixa dinâmica livre de espúrios (SFDR-Spuriou-free dynamic range), etc.~\cite{kester2005data}.
+
+Busca-se a seguir obter uma expressão para a RSR (ou RSR de quantização $\text {RSR}_q$) levando-se em conta apenas o ruído de quantização, pelo mesmo ser um dos fatores limitantes no desempenho do sistema e levando-se em conta que as demais imperfeições do DAC foram / serão combatidas através da escolha de um modelo adequado. 
+
+A expressão teórica da $\text {RSR}_q$ de um DAC para uma única senoide é dada em função do número de bits $b$ usados no processo de quantização das amostras como:
+%A ``qualidade" do sinal é basicamente dependente dos parâmetros do DAC. A escolha de um DAC é geralmente determinado, primeiramente, pela sua resolução ou número de de bits $N$ usados no processo de quantização e pela máxima taxa de atualização (amostras por segundo (SPS)). A RSR teórica de um DAC é determinado pelo número de bits de acordo com a seguinte expressão
+\begin{equation}
+\text{RSR}_q = 6.02 b + 1.76 \textrm{~~~~(dB)}
+\label{eq:dacsnronesine}
+\end{equation}
+%Esta expressão é válida para uma única senoide.
+Porém, esta expressão não é válida para sinais multitom, como é o caso da Equação \ref{eq:sumsenoide}, quando $|\cal K|$$>>1$. Assim, a expressão para multitom é deduzida a seguir.
+
+
+Quando a cardinalidade $|\cal K|$ do conjunto dos cossenos é suficientemente grande e o conjunto $\theta$ assume valores aleatórios uniformemente distribuídos entre $[-\pi, \pi]$, a distribuição da amplitude de $y[n]$  se assemelha ao envelope de uma  Gaussiana com média zero, variância $ \sigma^2 =\frac{A^2}{2}|\cal K|$ e pode-se assumir que $y[n]\in[-3 \sigma,3 \sigma]$, como será discutido a seguir.
+
+Deve-se projetar um quantizador de $b$-bits para a faixa dinâmica do sinal e evitar (\emph{overload}). Para tal, determina-se primeiramente
+%Neste caso, o sinal% Dado pelo poder do $ | \ cal K | $ cossenos. 
+%devido o $y[n]$ ser pré-calculado e, em seguida, uniformemente quantizados, as fases $\{\theta_k\}$ são escolhidas de tal forma que $y[n]\in[-3 \sigma,3 \sigma]$ e a sobrecarga é evitado com um  quantizador de $b$-bits projetado para esta faixa dinâmica. 
+a potência do sinal $y[n]$, que  é dada por 
+\begin{eqnarray}
+P_s &=& E[|y[n]|^2] \\
+   &=& E \left [ \left |\sum_{k \in \cal K} {A\cos(k \Delta_{\omega}  n + \theta_k)} \right |^2\right]\\
+   & \approx & \frac{A^2}{2}|\cal K| \label{eq:potencia}
+\end{eqnarray}
+onde $|\cal K|$ é o número total de senóides. A aproximação foi confirmada na prática e
+pode ser interpretada a partir do teorema do limite central.
+
+%Quando a cardinalidade $|\cal K|$ do conjunto dos cossenos é suficientemente grande, a distribuição da amplitude de $y[n]$  se assemelha ao envelope de uma  Gaussiana com média zero e variância $ \sigma_s^2 =\frac{A^2}{2}|\cal K|$. Neste caso, o sinal 
+
+Para um quantizador uniforme o passo de quantização $\Delta$  é projetado de acordo com as estatísticas do sinal. Dois casos são observados abaixo:
+
+\begin{enumerate}
+
+	\item  Para um sinal com distribuição entre $[-B,B]$
+\begin{equation}
+\Delta = \frac{2B}{2^b},
+\end{equation}
+onde $b$ é o numero de bits.
+
+	\item Para um sinal com distribuição Gaussiana com média $\mu$ e variância $\sigma^2$, uma decisão razoável é supor que a faixa dinâmica do sinal é $[-3 \sigma, 3 \sigma]$. Daí, se tem que:
+	\end{enumerate}
+	
+\begin{equation}
+\Delta = \frac{6\sigma}{2^b}
+\label{eq:deltaGauss}
+\end{equation}
+
+%Nota-se:
+%\begin{itemize}
+%\item Por Parseval, a potencia no tempo é a mesma na frequencia. Então, por mais que as fases das senoides façam o sinal no tempo ficar diferente, dependendo das fases, a potencia desse sinal é a mesma, independente das fases.
+%
+%\item Assume-se que para que a potencia total $P_t = M P_s$ seja sempre a mesma (por exemplo, 1), a potencia $P_s$ de cada senoide é diminuída a medida que $M$ aumenta
+%
+%\item Para $M$ grande, as amplitudes de $y[n]$ tem distribuicao Gaussiana.
+%\end{itemize}
+%\begin{equation}
+%\Delta = \frac{6\sigma}{2^N}
+%\label{eq:deltaGauss}
+%\end{equation}
+
+Devido às características de $y[n]$, adota-se a seguir a Equação~\ref{eq:deltaGauss}.
+Assumindo que o erro de quantização é uniformemente distribuída com variância $\sigma_q~=~\Delta^2/12$, onde $\Delta$ é o passo de quantização, a $\text{RSR}_q$ da quantização é dada por 
+\begin{equation}
+\text{RSR}_q = \frac{P_s}{\sigma_q} = \frac {P_s} {(6 \sigma/2^b)^2/12} = \frac {2^{2b }} {3} 
+\label{eq:RSR}
+\end{equation} 
+e pode ser aproximada por 
+\begin{equation}
+\text {RSR}_q \approx 6b -4,77 \textrm{~~~(dB)},
+\label{eq:SNR_db}
+\end{equation}
+que é razoavelmente precisa para $|{\cal K} | \ge 10$ e 6,5~dB abaixo da $\text{RSR}_q$ para uma única senoide dada pela Equação~\ref{eq:dacsnronesine}.
+
+%\section{Bloqueador do Tipo ``Af" para Sistemas GSM e LTE}
+%Nesta seção ... Lembrar das caracterísicas dos sistemas GSM e LTE. 
+
+%\section{Arquitetura do FPGA}
+%Na Figura \ref{fig:fpgageneralsystemblock} é apresentada a arquitetura proposta para implementação em FPGA. Pode ser observado que esta arquitetura é relativamente simples e consiste basicamente de um PLL(phase locked loop), um contador, uma ROM, e uma fase de sincronização. O PLL gera o clock do sistema e do DAC a partir de um clock de referência, o contador controla o endereço de leitura da ROM, que é usado para armazenar as amostras de $\xnbb$. As amostras são enviadas de forma contínua do FPGA para o DAC com período $N$.
+%
+%\begin{figure}[h]%
+%\includegraphics[width=\columnwidth]{./figure/fpga_general_system_block}%
+%\caption{}%
+%\label{fig:fpgageneralsystemblock}%
+%\end{figure}
+%
+%\section{Requisitos para geração do SB em banda base}
+%Os sistemas de transmissão de sinais de rádio freqüência são devem obedecer principalmente no que diz respeito a emissões espúrias, o qual é caracterizado como emissões em uma ou mais frequências fora da banda necessária.
+%
+%As emissões espectrais de dispositivos transmissores de sinais de rádio freqüência são geralmente regidos pelo chamado mascara espectral
+%O espectro de emissão de dispositivos transmmiter rádio são muitas vezes governado pelo chamado transmissor máscara espectral (Fig. 3). A máscara espectral estabelecer limites para o transmissor de densidade espectral de potência, ruído e emissões espúrias. Estes limites dependem das bandas específicas e freqüência de deslocamentos da freqüência portadora transmitida. Geralmente, o nível de potência de referência é considerada como o pico PSD no sinal e a o para fora da banda de emissão são calculados de acordo com este nível de referência. Uma máscara transmissor geral é apresentado na Figura 3. A máscara é composta basicamente por duas áreas de banda de freqüência, a banda e os fora-da área de banda. O principal objetivo é manter o fora-de emissões de banda a um nível mínimo aceitável, a fim de evitar a interferência com sistemas de transmissão próximas que não se destinam a ser preso.
+   
+%A geração do SB requer alguns cuidados. Os aspectos principais são PAPR, RSR e produtos de intermodulação e distorções harmômicas do DAC. 
+%Supondo-se que o ruído térmico proveniente da eletrônica do sistema é mantida a um nível razoável, o ruído do DAC, tais como erro de quantização e ruídos de distorção harmônica, são a principal deficiência. Por isso, devem ser tomadas atenção especial ao selecionar o DAC de tal forma que atenda às especificações em relação ao (SFDR), a razão  sinal-ruído (RSR), Distorção por Intermodulação (IMD) e Multi-tom relação potência (MTPR) \cite{kester2005data}.
+%A soma de várias portadoras para compor o SB 
+%Quando duas ou mais senoides são somadas
+
+\section{Arquitetura para o Transmissor-Heteródino do Sistema de Bloqueador de Telefonia Móvel Proposto} \label{sec:trHeterodin}
+A arquitetura adotada para o TH é apresentada, em forma de diagrama em blocos, na Figura~\ref{fig:moduloanalogblockdiag}. A cadeia de processamento do TH é constituída de um filtro passa baixas (FPB) ou filtro de reconstrução (FR), um amplificador de frequência intermediária (AMP-IF), um míxer de conversão ascendente, um filtro RF de banda passante (FBP), um amplificador de ganho variável (VGA), um sintetizador de PLL e um amplificador para o sinal da LO (AMP-LO). 
+   
+\begin{figure}[h!]%
+\centering
+\includegraphics[width=\columnwidth]{./figure/modulo_analog_block_diag_v2}%
+\caption{Diagrama em blocos simplificado do transmissor-heteródino.}%
+\label{fig:moduloanalogblockdiag}%
+\end{figure}
+
+O processamento do sinal pelo TH se inicia no FPB, que recebe o sinal $\xtbb$, proveniente do DAC,  e o filtra para remover as imagens resultantes do processo de conversão. Em seguida, o sinal é enviado para AMP-FI, que adequa o seu nível para a entrada FI do \emph{mixer}. A entrada LO do \emph{mixer} é excitada por um sinal de onda senoidal ou quadrada, proveniente de um sintetizador PLL. O PLL, por sua vez, recebe um sinal de referência de um oscilador e gera o sinal de LO. A frequência de saída do PLL é controlada digitalmente  e o seu nível é ajustado pelo AMP-LO, para adequá-lo à faixa de potência exigida na entrada LO do \emph{mixer}. O \emph{ mixer} translada $x^{FPB}(t)$ e gera o sinal de rádio frequência $x^{RF}(t)$. Em seguida, emprega-se o FBP no $x^{RF}(t)$ para remover as imagens indesejadas na saída do \emph{mixer}.
+%geralmente da tecnologia SAW (\emph{surface acoustic wave}),  
+Em seguida, emprega-se o VGA para adequar o sinal a níveis de potência mínima exigida pelo amplificador de potência (PA). Por último, o PA fornece a potência necessária e envia o sinal para antena para transmissão.
+
+
+Uma ilustração, em termos da magnitude da resposta em frequência do sinal na saída de cada estágio do TH é apresentada na 
+%A PSD do sinal na saída do DAC, LPF e FBP são apresentadas, respectivamente, na 
+Figura~\ref{fig:analog_PSD_chain}. 
+\begin{figure}[h!]%
+\centering
+\includegraphics[width=\columnwidth]{./figure/analog_PSD_chain}%
+\caption{PSD da cadeia do sinal no transmissor-heteródino.}%
+\label{fig:analog_PSD_chain}%
+\end{figure}
+
+A primeira ilustração, denominada de saída do DAC, apresenta um exemplo da resposta em magnitude do sinal na saída do DAC, sobreposta com a resposta em frequência ideal do FPB. Observa-se então que o espectro do sinal na saída do DAC é composto por várias imagens centradas em $lF_s$, $l\in\mathbb{Z} >1$. Estas imagens devem ser removidas pelo FPB, que, idealmente,  deve ter  uma magnitude da resposta em frequência, $\left| H_{\textrm{FPB}}\right|(f)$, dada por
+
+ %para limitar a banda e eliminar as imagens centradas em $lF_s$ com $l>0$ e recuperar o sinal original. Para tal, o módulo da magnitude da resposta em frequência ideal do FPB, $\left| H(f)_{\textrm{FPB}}\right|$ deve ser  dado por
+\begin{equation}
+\left|H_{\textrm{FPB}}(f)\right|= 
+ \left\{ \begin{array}{rl} 1, &  -Fs/2\leq f\leq F_s/2 \cup f_{\max}\leq f\leq -f_{\max} \\
+               0, & \text{outros valores},
+         \end{array} \right.
+\label{eq:impzoh}
+\end{equation}
+onde $f_{\min}$ e $f_{\max}$, são as componentes de frequências mínima e máxima, respectivamente,  do SB-BB. 
+
+A representação da resposta em frequência do sinal na saída do FPB é apresentada na segunda ilustração, denominada de ``Saída do DAC filtrado".
+
+A terceira ilustração, denominada de``Saída do mixer", apresenta a a magnitude da resposta em frequência do sinal na saída do\emph{ mixer}. A saída do mixer é composta por três componentes espectrais, o sinal da LO e duas imagens do sinal transladado, centradas em 
+%
+%em ma é apresentado Ainda na mesma Figura, pode-se observar que a saída do \emph{mixer}  é composta pelo sinal da LO, tipicamente uma onda contínua centrada na frequência $f_\textrm{LO}$, e  por duas componentes $\left|X^{RF}(f) \right|$ situadas em 
+\begin{align*}
+f_{{ci}}^\textrm{RF} &= f_\textrm{LO} -f_{\textrm{c}_{BW}}^\textrm{BB}\\
+f_{{cs}}^\textrm{RF} &= f_\textrm{LO} + f_{\textrm{c}_{BW}}^\textrm{BB},
+\end{align*}
+ onde  $f_{ci}^\textrm{RF}$ e $f_{cs}^\textrm{RF}$ são as bandas inferior (imagem espelhada) e superior, respectivamente. Geralmente, em aplicações onde se requer a recuperação das informações no sinal, é costume descartar a imagem espelhada juntamente com o $f_\textrm{LO}$. Porém, neste caso, não há a necessidade de recuperar nenhuma informação, então, qualquer uma das duas imagens podem ser usadas pelo BTM. A escolha de uma delas irá depender do FBP de RF disponível. Por exemplo, se for escolhido filtrar a imagem centrada em $f_{ci}^\textrm{RF}$, então, o FPB aplicado deve ter um  módulo da magnitude da resposta em frequência  ideal dado por:
+  %
+%Os componentes centrados em $f_\textrm{LO}$ e $f_{ci}^\textrm{BB}$ necessitam tipicamente de serem filtradas. Para tal, é usado o FBP de RF na saída do \emph{mixer}, o qual o módulo da magnitude da resposta em frequência é dado por 
+ \begin{equation}
+\left|H(f)_{\textrm{FBP}}\right|= 
+ \left\{ \begin{array}{rl} 1, & f<f_{\textrm{LO}} \cup f_{i_{\max}}^{RF}< f < f_{i_{\min}}^{RF} \\
+               0, & \text{outros valores}.
+         \end{array} \right.
+\label{eq:fbp}
+\end{equation}
+onde $f_{i_{\min}}^{RF}$ e $f_{i_{\max}}^{RF}$ são, respectivamente, as frequências mínima e máxima da imagem centrada na banda inferior. O módulo da  magnitude da resposta em frequência do sinal na saída do filtro da Equação~\ref{eq:fbp} é apresentado na Figura~\ref{fig:analog_PSD_chain}. 
+
+Por outro lado, o mesmo procedimento se aplica quando a imagem escolhida para filtrar for a centrada em $f_{cs}^\textrm{RF}$, substituindo-se na equação\textbf{} o $f_{i_{\min}}^{RF}$ e $f_{i_{\max}}^{RF}$ por $f_{s_{\min}}^{RF}$ e $f_{s_{\max}}^{RF}$, respectivamente. 
+
+Na prática, recomenda-se evitar ter $\xtbb$ com potência significativa em frequências próximas ao nível DC e definir um deslocamento em frequência $f_{min}>>0 $ em relação ao DC (0 Hz), a fim de permitir o uso de um FBP menos seletivo no processo de filtragem para remoção das imagens indesejadas em RF.
+
+Alguns \emph{mixers} de conversão ascendente, chamados de \emph{single-sideband mixers}, atenuam uma das imagens indesejadas e a portadora da LO. O uso deste tipo de \emph{mixer} pode ajudar a relaxar as especificações do FBP. Porém, estes são tipicamente mais custosos que os tradicionais. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{ Metodologia para geração do sinal digital em banda base} \label{sec:metodologia}
+Na sequência, resumimos uma metodologia para escolher os quatro parâmetros usados para gerar $y[n]$: $F_s$, $N$, ${\cal K}$ and $b$. 
+ %a fim de atender às especificações-chave em quatro grandes categorias de ruído e distorção:
+ %espúrias livre Dynamic Range (SFDR), a relação sinal-ruído (RSR), Distorção por Intermodulação (IMD ) e razão de poder multi-tom (MTPR) \ cite {}. Estes quatro parâmetros são fundamentais para garantir que o sinal de banda gerado atende metas espúrios e IMD necessários.
+%Por isso, deve ser tomado especial atenção ao selecionar o DAC 
+ 
+%
+%O BTM deve operar em $Q$ bandas de frequência não-contíguas e/ou multiplos RATs, assume-se sem perda de generalidade que  sumsenoide é usada para obter cada um dos sinais $Q$ e a sua soma para criar $y[n]$ é weighted pelos ganhos independentemente escolhidos de $Q$ que permitem conformar diferentes bandas de $Y(e^{j \omega})$ com flexibilidade. Outro aspecto prático neste caso é que pode ser economicamente beneficiente usar mais que um DAC e estágios de upconversion, mas este assunto não é discutido aqui.
+
+\begin{algorithm}[H]
+\caption*{\textbf{Metodologia de projeto}
+\label{methodology}}
+
+\KwIn{Defina as frequências centrais dos canais $\{f_c^{RF}\}$ e suas larguras de banda $\{B_c\}$}
+\KwOut{$F_s$, $N$, ${\cal K}$, $b$, $y[n]$ (Para cada canal do BTM)} 
+
+A partir do conjunto de RATs de interesse, escolha $M$
+
+
+\For{$i=1,\ldots,M$ \textrm{(processa para cada um dos canais)}}
+{
+Para cada RAT, determine $\Delta_f$,  $\{f_c^{RF}\}$ e $BW$
+%Selecione o subconjunto de  $\{f_c^{RF}\}$ e a $\{BW\}$ correspondente a cada canal, e escolha os componentes de frequência de $x_i^{\textrm{RF}}(t)$. Baseado na sua separação, determine $\Delta_f$
+
+Com base nas especificações do mixer, dos filtros de RF, e da máxima $F_s$ suportada/desejada pelo sistema, escolha $f_{\min}$ e  calcule $f_{\max}$  para $x_i^{\textrm{BB}}(t)$
+
+Defina o $i$-th estagio de conversão ascendente, incluindo $\textrm{LO}_i$
+
+Com base nas características do FPB disponível, escolha $F_s > 2 f_{\max}$
+
+Calcule $N = \left \lceil \frac{F_s}{\Delta_f} \right \rceil$
+
+\If{$\frac{F_s}{\Delta_f}$ Não for um inteiro}{Recalcule $F_s=N \Delta_f$}
+
+Calcule o grupo de ${\cal K} = \{ k \}$ índices de tal forma que $f_k^{BB} = k \Delta_f$ são as componentes frequenciais em $x_i^{\textrm{BB}}(t)$
+
+%Usando $\textrm{LO}_i$, mapeie as frequências em $x_i^{\textrm{RF}}(t)$ em um grupo de ${\cal K} = \{ k \}$
+%índices de tal forma que $f_k^{BB} = k \Delta_f$ são as frequências em $x_i^{\textrm{BB}}(t)$
+
+%Escolha o DAC e o número de bits $b$ associados. Como orientação, $b \ge \left \lceil ( \text{RSR}_q+4.77 )/6 \right \rceil$ dado que, além do ruído de quantização, deficiências como SFDR também impactam a PSD de transmissão 
+
+Escolha o número de bits $b$ para quantização. Como orientação, $b \ge \left \lceil ( \text{RSR}_q+4.77 )/6 \right \rceil$ dado que, além do ruído de quantização, deficiências como SFDR também impactam na RSR e na PSD do transmissor 
+
+Calcule $y[n]$ usando a  Equação~(\ref{eq:sumsenoide}) e quantize-o com $b$ bits, com o objetivo de utilizar toda a faixa dinâmica do DAC.
+} 
+\label{alg:calulate_yn}
+\end{algorithm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Protótipo Desenvolvido para o Bloqueador de Telefonia Móvel} \label{sec:prototipo}
+Nesta seção é apresentado um protótipo de BTM-A, baseado nas arquiteturas e cadeias de processamento apresentadas na Seção~\ref{sec:uld} para geração do SBD-BB e na Seção~\ref{sec:trHeterodin} para a translação deste sinal para a RF. 
+
+O protótipo da BTM combina técnicas de PDS e PAS em um sistema modular composto basicamente por três partes principais: Uma placa digital, duas placas de transmissor-heteródino e um módulo de controle. 
+
+O sistema completo do protótipo do BTM é apresentado na Figura~\ref{fig:placaBTMDIGANL}, onde são destacadas as PCIs (placa de circuito impresso)\nomenclature{PCI}{Placa de Circuito Impresso} que implementam cada um dos referidos módulos.
+\begin{figure}[h!]%
+\centering
+\includegraphics[width=0.6\columnwidth]{./figure/placa_BTM_DIG_ANL}%
+\caption{Placa do protótipo de BTM  desenvolvida para tese.}%
+\label{fig:placaBTMDIGANL}%
+\end{figure}
+
+Com o objetivo de apresentar de forma clara todos os aspectos constituintes do protótipo do BTM, apresenta-se na Figura~\ref{BTMprotoblockdiag} um esquema representativo em diagrama de blocos a estrutura detalhada do protótipo. Observa-se que a placa digital comporta a ULD implementada no FPGA  EP3C120F480C7 da família Cyclone III da Altera e, no que se refere à parte responsável pela geração do sinal digital, a mesma é baseada na arquitetura proposta na Seção~\ref{sec:uld}  e ilustrada na forma de diagrama em blocos na Figura~\ref{fig:uld}. Ainda, a placa digital é munida de  8~DACS (4 DACs duais) de 14 bits cada, compondo assim um sistema de $M=8$ canais independentes de transmissão. Cada canal é roteado para um conector SMA (\emph{SubMiniature version A}) \nomenclature{SMA}{SubMiniature Version A} e disponibilizado para conexão com a placa analógica. Na mesma Figura é destacada a estrutura do 
+%
+%A placa digital implementa a ULD no 
+ %adicionado de alguns recursos extras. 
+%
+%O diagrama em blocos apresentado na Figura(), referente ao módulo digital, representa, em forma de diagrama em blocos, 
+nível mais alto (Top level) do projeto de HDL implementado no FPGA para a ULD, onde, basicamente, a ULD implementa três blocos principais que são os seguintes: 
+\begin{enumerate}
+	\item \textbf{ROM} - armazena as amostras pré-calculadas do sinal digital;
+	\item \textbf{Controle de ganho} - ajusta os ganhos individuais de cada um dos canais em passos de 1~dB. Este bloco ainda tem a função de ligar ou desligar um determinado canal.
+	\item \textbf{Somador} - o somador fornece a opção de somar bandas menores em um único canal, em que cada uma das bandas irá possuir controle de ganho independente. Isso dá mais flexibilidade ao sistema, pois permite gerar e controlar duas bandas em um único canal. O somador pode ser ignorado caso se deseje gerar apenas uma única banda por canal.
+	\item \textbf{CPU} - responsável por rodar os programas que executam todo o processo de controle referente aos comandos de entrada via teclado, escrita no LCD e controle da frequência de saída do sintetizador PLL através da comunicação SPI (\emph{serial peripheral interface})\nomenclature{SPI}{Serial Peripheral Interface}.  
+\end{enumerate}
+ %Por final, o módulo de controle, composto por um LCD e botões de controle, executa algumas tarefas de controle do sistema implementados no FPGA.
+
+\begin{figure}[h!]%
+\centering
+\includegraphics[width=\columnwidth]{./figure/BTM_proto_block_diag}%
+\caption{Esquema representativo em diagrama de blocos do protótipo do BTM.}%
+\label{BTMprotoblockdiag}%
+\end{figure}
+
+%Todo o processo de controle é executado pelo CPU. Dentre os controles disponíveis estão, seleção de canais, aplicação de ganho ind, 
+%O bloco de controle de ganho controla o ganho individual de cada um dos canaiss em passos de 1~dB. Cada canal pode ser ligado e desligado individualmente.  
+
+%As amostras dos sinais digitais armazenados nas ROMs para cada um dos canais é transmitido do FPGA para quatro 
+
+ %A placa digital ainda implementa toda a logica de controle do sistema, como, por exemplo, a frequência de saída do PLL, controlado via interface SPI (\emph{serial peripheral interface})\nomenclature{SPI}{Serial Peripheral Interface} e outras funções pertinentes. 
+A placa digital é um módulo independente e pode ser conectada a outros módulos de transmissor-heteródino ou pode ser usada para gerar sinais em banda base para efeitos de testes e avaliação da qualidade do SB-BB gerado digitalmente. 
+
+
+
+Ainda na Figura~\ref{BTMprotoblockdiag}, referente à placa analógica para o transmissor-heteródino, ressalta-se que duas placas foram projetadas para permitir maior flexibilidade em termos de cobertura de diferentes áreas do espectro usados por STMs.
+%No que se refere a banda de frequências cobertas por cada uma das placas do módulo analógico, tem-se que 
+Assim, a ``placa analógica~1" compreende as frequências de 851-960~MHz divida em 4 bandas, enquanto que a ``placa analógica 2" compreende as frequências de 1805-2165~MHz (Figura~\ref{BTMprotoblockdiag}) dividida em 3 bandas. As especificações para a divisão das bandas por canal foram baseadas na divisão de bandas para os STMs no Brasil \cite{Telecobandastel}. Ressalta-se que bandas menores podem ser geradas, desde que estejam contidas na banda de passagem dos filtros de RF. Dentre as bandas possíveis estão envolvidos os sistemas como GSM850, GSM900, GSM1800, GSM1900, LTE, 3G, CDMA Nextel, etc. As duas placas ainda oferecem a possibilidade de combinar os canais para compor bandas maiores através de um combinador de sinais analógicos.
+
+A arquitetura e cadeia de processamento dos transmissores-heteródinos de todos os canais nas duas placas são baseadas na apresentada na Seção~\ref{sec:trHeterodin}  Figura~\ref{fig:moduloanalogblockdiag}, com exclusão do PA. Assim, o transmissor-heteródino é constituído pelos seguintes componentes: 
+%Porém, independente da banda coberta, o bloco do transmissor heteródino de cada um dos canais é constituído por um filtro de reconstrução localizado na entrada do sistema, seguido de um amplificador de banda base, mixer, filtro passa-banda de RF e um amplificador de RF. A função de cada um dos componentes foi descrito anteriormente na Seção~\ref{sec:trHeterodin}.
+
+\begin{itemize}
+\item \textbf{Filtro passa-baixas} - O filtro passa-baixas (FPB) ou filtro de reconstrução é o primeiro estágio pelo qual passa o sinal proveniente do DAC da placa digital e, como dito anteriormente, este filtro tem a função de atenuar as imagens do sinal resultantes do processo de conversão de digital para analógico, as quais são centradas em $lF_s$, $l>0$.  Na Figura~\ref{fig:BTMLOWPASSFILTER} é apresentado a reposta em frequência do filtro passa-baixas empregado na reconstrução do sinal na saída do DAC de todos os canais do protótipo. 
+%O FPBR foi especificado de forma a flexibilizar a escolha do $F_s$.  a reposta em frequência é apresentada aqui como referência (Figura~\ref{fig:BTMLOWPASSFILTER}%
+\begin{figure}[h!]%
+\centering
+\includegraphics[width=0.8\columnwidth]{./figure/BTM_LOW_PASS_FILTER}%
+\caption{Resposta em frequência de um FPB comercial típico.}%
+\label{fig:BTMLOWPASSFILTER}%
+\end{figure}
+Observa-se no entanto que este filtro tem uma banda de passagem de 65~MHz, onde a atenuação é menor que 1~dB. A frequência de corte é  71~MHz com atenuação de 3~dB. Na banda de rejeição, o filtro atenua mais que 20~dB na faixa de 86-96~MHz e mais que 40~dB para frequências maiores que 96~MHz. 
+
+As especificações do FPB foram levantadas levando em conta uma máxima largura de banda do sinal de 45~MHz com um $f_{\min}=~10$~MHz o que resulta em um $f_{\max}=55$~MHz e, assim, um $F_s>110$~MHz. Por exemplo, nestas condições, se $F_s=150$~MHz, a imagem na segunda zona de Nyquist é centrada em 117.5~MHz e a sua mínima frequência é igual a 95~MHz, o qual será atenuado de mais de 20~dB e 40~dB após 1~MHz, que pode ser considerado bastante razoável nessas condições.  
+	
+%Portanto, tendo em mente que a remoção eficiente das imagens centradas em $lF_s$ é dependente da área do espectro em que estes  o qual é controlado pelo  $F_s$ do DAC, 
+%
+%A frequência de amostragem deve ser escolhido de tal forma que a frequência mais baixa da imagem na segunda zona de Nyquist esteja contida na área de atenuação de 40~dB do filtro, ou seja, em outras palavras, a frequência mínima da imagem deve ser maior que pelo menos 96 MHz. Isso resulta em uma frequência de amostragem mínima de 
+%
+%
+%Desta forma, neste sistema a frequência de amostragem 
+%mínima é deve, no mínimo, ser maior  que a frequência de corte do filtro. Entretanto deve-se buscar localizar esta esta imagem de forma a obter a maior atenuação possível, o qual ocorre na faixa de frequência de 96-710~MHz. Um boa escolha então é fixar como frequência alvo 100~MHz. 
+%devem estar situadas o uso deste filtro limita os valores de FS 
+%Isso faz com que a mínima $F_s$ seja igual 
+
+\item \textbf{Amplificador de banda base} -Após a remoção das imagens do sinal na saída do DAC pelo FPB, o sinal resultante necessita ser amplificado  para compensar a perda imposta pelo filtro passa-baixas e da perda de conversão do mixer no próximo estágio. O amplificador de banda base é o responsável por realizar esta tarefa, provendo um ganho equivalente as perdas e diminuir a contribuição do ruído de fundo no sistema.
+
+ \item \textbf{Mixer de conversão ascendente} -  A transladação do sinal proveniente do amplificador de banda base para RF é realizada através do mixer de conversão ascendente. O protótipo do BTM usa um mixer passivo comum (sem supressão de imagens) e sua faixa de atuação abrange as frequências centrais de todos os canais do BTM. Desta forma foi usado um único mixer em todos os canais do BTM.
+ 
+
+\item \textbf{Sintetizador de frequência PLL} -  O sintetizador de frequência PLL é responsável por gerar o sinal para a LO do mixer. O BTM usa um sintetizador de banda larga com VCO (\emph{voltage controlled oscillator} ou oscilador controlado por tensão) integrado. A geração do sinal é realizada alimentando o sintetizador com um clock externo de 40~MHz fornecido por um oscilador de cristal e a frequência do sinal gerado é controlada digitalmente, através de comunicação SPI  controlado pela placa da ULD. 
+
+\item \textbf{Amplificador de LO} - O amplificador de LO é usado para amplificar o sinal do LO e adequar a sua potência para o nível exigido na entrada LO do mixer. Neste caso, a potência do sinal gerado pelo sintetizador de frequência PLL varia entre -4 e 5~dBm (controlado digitalmente em passos de 3~dB), enquanto que a exigida na entrada LO do mixer varia entre 13 e 16~dBm. Usou-se então um amplificador com um ganho típico de aproximadamente 13~dBm para condicionar o sinal para a entrada LO do mixer.   
+
+\item\textbf{{Filtro banda-passante de RF}} - Como discutido na Seção, o sinal na saída de um mixer comum é composto por três componentes espectrais, duas imagens do sinal transladado e o sinal do LO. Porém, apenas uma das imagens transladadas é necessária e a outra, juntamente com o sinal do LO, devem ser removidas. O filtro  banda-passante (FBP) de RF é o responsável pela remoção de tais componentes indesejados. No protótipo do BTM são usados diferentes FBP de RF, de acordo com a banda de interesse. Os filtros usados são da tecnologia SAW e são geralmente especificados de acordo com a aplicação. Por exemplo, na Figuras~\ref{fig:LTEBand5filterPSD}~e~\ref{fig:Triquint_GSM900_filter} são  apresentadas as respostas em frequência dos filtros empregados, respectivamente, nos canais 2 e 3 do protótipo e os quais podem ser empregados nas aplicações de LTE banda 5 (LTE-B5) e GSM900, respectivamente.
+
+%A limitação das bandas é realizada por filtros de RF da tecnologia SAW. Como exemplo, são paresentadas as respostas em frequência para os . 
+
+\begin{figure}[h!]%
+\centering
+\includegraphics[width=0.7\columnwidth]{./figure/Oscilent_LTE_Band_5_DL_filter}%
+\caption{Resposta em frequência de um filtro de RF empregado no canal 1 do protótipo do BTM para aplicações de LTE-B5.}%
+\label{fig:LTEBand5filterPSD}%
+\end{figure}
+
+\begin{figure}[h!]%
+\centering
+\includegraphics[width=0.7\columnwidth]{./figure/Oscilent_GSM900_filter}%
+\caption{Resposta em frequência de um filtro de RF empregado no canal 2 do protótipo do BTM para aplicações de GSM900}%
+\label{fig:Triquint_GSM900_filter}%
+\end{figure}
+
+O filtro do canal 2 tem uma banda passante de 869-894 com perda por conversão de 2.2dB (típico) \cite{oscilentRF8815}. Este atenua, tipicamente, 47-60~dB em faixas de frequência de DC-849~MHz e 30-55~db em faixas de frequência de 914-2000~MHz. Já o filtro do canal 3 \cite{oscilentRF951}, 
+%é dedicado à aplicações de GSM900 \cite{oscilentRF951}  e 
+atenua entre 18-35~dB nas frequências de 10-915 MHz e 26-28~dB nas frequências de 980-310~MHz.
+
+
+%de potência  da na entrada LO do mixer. 
+\item \textbf{Amplificador de RF }- O amplificador de RF constitui o último estágio do protótipo do BTM. O sinal proveniente do FBP deve ser amplificado para sua adequação aos níveis mínimos de potência exigidas na entrada do PA. Com o objetivo de fornecer maior flexibilidade no controle da potência que deve ser fornecida para o PA, o Amplificador de RF foi combinado com um atenuador em um esquema em que o sinal é primeiramente amplificado e depois atenuado de acordo com a potência exigida na entrada de um determinado PA. Dois amplificadores de RF são empregados no protótipo para permitir a cobertura de todas as bandas usadas. O primeiro cobre as bandas de 851-960~MHz e o segundo cobre as bandas de 1805-2165~MHz. Ambos podem fornecer um ganho plano de aproximadamente 20~dB nas bandas de interesse.
+
+%extensa nas bandas de frequência desejadas e pode fornecer.  
+ %esta tarefa em co. O sinal na saída do mixer possui uma potência de aproximadamente  e  
+ 
+%Neste caso deseja se recuperar o sinal centrado em $f_{cl}^{RF}$, assim,  $f_{LO} = f_{cl}^{RF}+f_c^{BB}$ o qual resulta em $f_{LO}= 881.2+22.5 = 903.7$ e 
+%$f_{LO} = 947.5+22.5 = 970$
+\end{itemize}
+
+
+\section{Conclusão}
+Neste capítulo foi descrito o estágio atual do trabalho através do sistema proposto para bloqueio de telefonia móvel. Arquiteturas para os dois componentes principais que compõem o tal sistema foram apresentadas e discutidas.
+
+Uma arquitetura para a ULD baseada em FPGA, o qual combina técnicas eficientes de PDS para gerar o SBD-BB foi apresentada e suas características principais detalhadas.
+
+Uma expressão para a RSR de quantização foi derivada e a mesma permite escolher o DAC de forma flexível, o que é essencial ao projeto do sistema. 
+%Quando os sinais são e foi apres uma arquitetura entada e discutida com certo detalhe. aruitetam apresentadas as estruturas, arquiteturas e  aspect
+
+Por fim foi apresentado um protótipo desenvolvido para o BTM do tipo ``A", onde foram apresentados, de forma detalhada, todos os componentes do sistema e suas especificações.
+
+No próximo capítulo são apresentados resultados preliminares de simulação e validação da implementação prática.
+   
+%
+%\subsection{Filtro passa-baixas}
+%\subsection{Amplificador de BB}
+%\subsection{Mixer de frequência}
+%\subsection{Amplificador de RF}
+%\subsection{Filtro de RF}
+%, o que não é desejado, ou até mesmo impossível em algumas aplicações.
+%Ao gerar o SB em banda base, podemos considerar duas fontes principais de ruído: O primeiro é o chamado ruído térmico, derivado da eletrônica do sistema. A segunda são ruídos provenientes do DAC, como a quantização e ruídos de distorção harmônica. Por isso, em banda-base, as emissões espectrais são basicamente dependente dos parâmetros DAC. Por este motivo, atenção especial deve ser tomado ao selecionar um DAC, a fim de atender às especificações-chave em quatro grandes de ruído e distorção categorias: espúrias livre Dynamic Range (SFDR), a relação sinal-ruído (RSR), Distorção por Intermodulação (IMD ) e razão de poder multi-tom (MTPR) \ cite {}. Estes quatro parâmetros são fundamentais para garantir que o sinal de banda gerado atende metas espúrios e IMD necessários.
+
+%Este é o processamento digital de sinal  padrão, sendo a principal contribuição deste trabalho  sistematizar as especificações do projeto  e mostrar o impacto dos parâmetros do custo computacional em geral. 
+%Na seqüência, a metodologia é descrita para escolher os quatro parâmetros: $F_s$, $N$, ${\cal K}$ e $b$. As etapas são as seguintes:
+%\begin{algorithmic}[1]
+%\STATE From the set of RATs of interest, their frequencies and bandwidths, and the upconversion stage, identify the required frequency components in $\xtbb$.
+%\STATE Select $\Delta f$ and the maximum frequency $f_{\max}$ in $\xtbb$. Afterward, calculate:
+%\STATE $F_s > 2 f_{\max}$
+%\STATE $N = \lceil \frac{F_s}{\Delta f} \rceil$
+%
+%\IF {$\frac{F_s}{\Delta f}$ is an integer} \STATE Given the desired jamming frequencies $f_k$, choose the values of $k = f_k / \Delta_f$ to compose $\cal K$
+%\ELSE 
+%\STATE recalculate $F_s = N \Delta f$
+%\ENDIF
+%\STATE Calculate the DAC minimum required  number of bits $b$ from the expression that relates the DAC ideal RSR and $b$ for a full scale sinewave, which is given by \cite{kester2005data}:
+%\begin{equation}
+%\text{RSR}_ {\text{DAC}} = 6.02 b + 1.76 \text{dB} \rightarrow b = \lceil \frac{\text{RSRMin}-1.76 \text{dB}}{6.03} \rceil,
+%\label{Eq:DACRSR}
+%\end{equation}
+%where RSRMin is the minimum required RSR on the DAC output. It is important to note that the above expression does not take into account other noise sources that contributes to increase the noise floor and also the PAPR inherent to the sum of sinusoids.  Therefore, when choosing the minimum number of bits, it is recommended  to give a margin of at least 10~dB (add two more bits) to give space for such noise sources.
+%therefore it is recommended to add more tow bits from the resulting calculated number of bits in order to give space. 
+
+%From a minimum required RSR on the DAC output, the minimum DAC number of bits can be calculated from the relationship between the DAC ideal RSR and the number of bits $b$
+%Therefore 	$b = \frac{\text{RSRMin}-1.76 \text{dB}}{6.03}$
+%\end{algorithmic}
+%Quando se trata de gerar o DS em banda de base, duas abordagens podem ser consideradas, analógico e digital. Ao utilizar os métodos analógicos a tarefa é geralmente realizada por um VCO, onde a precisão do sinal de frequência gerado depende muito do desempenho da IC diferente de componentes discretos e usado para sintonizar e controlar o VCO. Por exemplo, resistores e capacitores são usados ??para definir a frequência de uma onda triangular usado para sintonizar o VCO \ cite {} sbeeh2008 onde diferentes capacitores e resistores valores produzem frequências de saída VCO diferentes. No entanto, os valores dos capacitores e resistores veio normalmente com tolerâncias ($ 1 \%, 5 \% $, etc) e eles também são sensíveis às mudanças de temperatura, isso pode causar variações significativas na freqüência do VCO saída em uma imprevisível e forma incontrolável. Como resultado, o VCO pode produzir o sinal com freqüências que vai colocar para fora da freqüência de destino especificado e, consequentemente, podem interferir com os sistemas de transmissão próximas. 
+%
+%Neste trabalho, propomos um sistema configurável para gerar um sinal de banda DS por meio de técnicas de processamento digital de sinais. O sistema proposto é apresentado na fig. \ ref {} jammerblockdiagram. Tal sistema é composto basicamente por um FPGA e um DAC. O FPGA é usado para gerar uma sequência de tempo discreto, que representa o sinal de banda de base e o DAC converte esta sequências para um sinal de banda de base de tempo contínua, que é então transmitido para a frequência de conversão para valores de bloco, a fim de converter o sinal de banda de base para o desejado RF.
+
+%\subsection{Objetivos}
+
+
+
+

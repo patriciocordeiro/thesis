@@ -1,0 +1,59 @@
+\begin{thenomenclature} 
+
+ \nomgroup{A}
+
+  \item [{3GPP}]\begingroup Third Generation Partnership Project\nomeqref {2.0}
+		\nompageref{10}
+  \item [{ARFCN}]\begingroup Absolute Radio Frequency Channel\nomeqref {2.0}
+		\nompageref{9}
+  \item [{BTM}]\begingroup Bloqueadores de Telefonia Móvel\nomeqref {1.0}
+		\nompageref{2}
+  \item [{CI}]\begingroup Circuito integrado\nomeqref {2.0}
+		\nompageref{9}
+  \item [{DAC}]\begingroup Digital to Analog Converter\nomeqref {3.0}
+		\nompageref{22}
+  \item [{DM}]\begingroup Dispositivo Móvel\nomeqref {1.0}
+		\nompageref{2}
+  \item [{EMI}]\begingroup Electromagnetic Interference\nomeqref {2.0}
+		\nompageref{7}
+  \item [{ERB}]\begingroup Estação de Rádio Base\nomeqref {1.0}
+		\nompageref{2}
+  \item [{ETSI}]\begingroup European Telecommunications Standards Institute\nomeqref {2.0}
+		\nompageref{10}
+  \item [{FPGA}]\begingroup Field Programmable Gate Array\nomeqref {1.0}
+		\nompageref{3}
+  \item [{HDL}]\begingroup Hardware Description Language\nomeqref {3.0}
+		\nompageref{23}
+  \item [{PAS}]\begingroup Processamento Analógico de sinais\nomeqref {1.0}
+		\nompageref{3}
+  \item [{PCI}]\begingroup Placa de Circuito Impresso\nomeqref {3.15}
+		\nompageref{32}
+  \item [{PDS}]\begingroup Processamento Digital de Sinais\nomeqref {1.0}
+		\nompageref{3}
+  \item [{PLL}]\begingroup Phase Locked Loop\nomeqref {3.0}
+		\nompageref{23}
+  \item [{RAT}]\begingroup Classificação de Tecnologias de Acesso via Rádio \nomeqref {1.0}
+		\nompageref{2}
+  \item [{RF}]\begingroup Rádio Frequência\nomeqref {1.0}\nompageref{2}
+  \item [{ROM}]\begingroup Read-Only Memory\nomeqref {3.0}
+		\nompageref{23}
+  \item [{RSR}]\begingroup Razão Sinal-Ruído\nomeqref {2.0}
+		\nompageref{8}
+  \item [{SB}]\begingroup Sinal de Bloqueio\nomeqref {1.0}
+		\nompageref{2}
+  \item [{SB-RF}]\begingroup Sinal de bloqueio em Rádio Frequência\nomeqref {2.0}
+		\nompageref{6}
+  \item [{SBD-BB}]\begingroup Sinal de Bloqueio Digital em Banda Base\nomeqref {1.0}
+		\nompageref{3}
+  \item [{SMA}]\begingroup SubMiniature Version A\nomeqref {3.15}
+		\nompageref{32}
+  \item [{SPI}]\begingroup Serial Peripheral Interface\nomeqref {3.15}
+		\nompageref{33}
+  \item [{TDF}]\begingroup Transformada Discreta de Fourier\nomeqref {3.1}
+		\nompageref{23}
+  \item [{TH}]\begingroup Transmissor-Heteródino\nomeqref {1.0}
+		\nompageref{3}
+  \item [{ULD}]\begingroup Unidade Lógica Digital \nomeqref {1.0}
+		\nompageref{3}
+
+\end{thenomenclature}

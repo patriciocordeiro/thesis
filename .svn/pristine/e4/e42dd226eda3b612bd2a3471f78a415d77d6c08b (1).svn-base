@@ -1,0 +1,517 @@
+\chapter{Bloqueadores e Classificação de RAT: Conceitos e estado da arte}
+\section{Introdução}
+Este capítulo introduz conceitos e o estado da arte sobre  BTMs, assim como conceitos introdutórios sobre duas RATs: LTE e GSM. O capítulo tem por objetivos específicos, 
+explorar técnicas aplicadas em sistemas de BTM, com foco nos BTMs chamados de tipo ``A'' e, por outro lado, fornecer uma visão simplificada do funcionamento dos sistemas LTE e GSM, especificamente, no que se refere à estrutura da camada física dedicada à transmissão de dados, com ênfase nas técnicas de duplexação, bandas de espectro, métodos de acesso e canais de comunicação de dados. Tais conceitos são  fundamentais para o desenvolvimento de estratégias, algoritmos e  técnicas de bloqueio aplicados a estes sistemas.
+  
+Inicia-se o capítulo  com a descrição de técnicas aplicadas em sistemas BTM para bloqueio de sinais de TM. Posteriormente, apresenta-se o estado da arte na área de BTMs, através de uma revisão bibliográfica detalhada, com ênfase nos BTM-A.
+Conclui-se o capítulo com a introdução de conceitos sobre as RATs, LTE e GSM.
+
+ %duas tecnologias de acesso de rádio (RAT) \nomenclature{RAT}{Radio Access Technology}, GSM (\emph{global system for mobile communication}, ou sistema global para comunicações móveis )\nomenclature{GSM}{Global System for Mobile Communication} e LTE (\emph{Long Term Evolution}, ou evolução de longo prazo) \nomenclature{LTE}{Long Term Evolution}. 
+
+%Por fim são apresentados conceitos sobre classificação de RATs.
+
+\section{Conceitos sobre Técnicas de Bloqueio para Telefonia Móvel }
+BTMs são dispositivos que visam interromper a comunicação entre um DM e sua ERB. A técnica usada para executar tal tarefa pode ser considerada inteligente, geralmente, quando o BTM usa técnicas sofisticadas para interagir com a ERB/DM, ou não-inteligente, quando não existe interação sofisticada entre o BTM e a ERB/DM.  
+
+%Desta forma,  os BTM's são classificados de acordo com a técnica usada para interromper a comunicação dos SMs (SM) \nomenclature{STM}{Sistema Móvel}. 
+
+Segundo \cite{RABC2001}, cinco tipos de BTM foram desenvolvidos ou já tiveram desenvolvimento planejado. Os cinco tipos foram classificados de ``A'' a ``D'', baseados na técnica usada para bloquear os sinais dos SMs. Em seguida será descrito cada um dos tipos de BTM.
+
+\begin{itemize}
+
+\item \textbf{BTMs do Tipo ``A" } - BTM-A são relativamente simples quando comparados aos outros tipos. Sua técnica de bloqueio consiste na transmissão contínua de SB-RF
+%são chamadas de tipos `` A "e `` D", outros interagem com  a ERB (tipos `` B "e `` C") e outros são baseados na no isolamento interferência eletromagnética (IEM) \nomenclature{IEM}{Interferência Eletromagnética} escudo (tipos D jammer `` ") \cite {sbeeh2008, Jisrawi2006}.
+%BTM's do tipo A transmitem continuamente sinais de bloqueio (ruído)  
+nas mesmas  frequências   usadas pelo(s) SM(s) alvo(s). Quando ativos em uma determinada área, são capazes de bloquear a comunicação entre os DM's e a ERB envolvidos na área. O alcance do bloqueio é dependente da potência de transmissão do BTM e da sua separação   dos DM's alvos. 
+Geralmente, estes dispositivos não interagem com a ERB
+%, mas podem usar técnicas complementares para identificar, por exemplo, a variação de potência do sinal da ERB/DMs em uma determinada área e, assim, gerar o sinal de bloqueio de acordo.
+%Dispositivos que usam esta técnica complementar são comumente referidos como BTMs inteligentes. Mais adiante esta técnica será descrito com maior detalhe.
+%Tais dispositivos, desprovidos de qualquer inteligência, não interagem com a ERB
+ e, portanto, sua implementação não requer cooperação com os provedores da telefonia celular, o que torna seu projeto e implementação relativamente simples. Porém, possuem pouca seletividade espectral e podem facilmente interferir  nos sistemas de comunicação vizinhos.  Ainda, a transmissão conjunta de vários dispositivos em uma determinada 
+faixa do espectro, pode aumentar o ruído de fundo e impedir o funcionamento adequado dos sistemas vizinhos, além de um relativamente alto consumo de potência. 
+%
+ %o uso de vários BTM's do tipo ``A"  transmitindo nas mesmas frequências em uma determinada área podem aumentar o ruído de fundo e impedir o funcionamento adequado dos sistemas vizinhos.
+ 
+\item \textbf{BTMs do tipo ``B"} - Dispositivos do tipo ``B" buscam superar as dificuldades citadas através de uso de técnicas inteligentes que não requerem transmitir continuamente SB-RF em vastas bandas. O bloqueio é baseado na interação entre o BTM e a ERB, onde o primeiro intercepta as mensagens de   
+%Neste caso, a técnica Dispositivos do tipo ``B" interagem com a ERB e o bloqueio dos DMs é realizado mediante 
+%através da interptação do atuam no intervalo reservado para sinalização, 
+%interceptação dos 
+sinalização enviados pela ERB para um determinado MD e, em seguida, instrui a mesma de que o respectivo MD se encontra em uma ``\emph{área de silencio}" e, portanto, não pode se comunicar.
+Esta técnica permite a realização de chamadas emergências para usuários habilitados e sua  implementação requer cooperação com as operadoras de telefonia celular.
+%, já que atuam como uma parte integral do STM alvo.
+
+\item \textbf{BTMs do tipo ``C"} - Atuam como \emph{beacon} e, quando localizados em uma ``\emph{área silenciosa}", instruem  todos os MD compatíveis
+  %envolvidos nesta área 
+a desabilitarem a sua operação. Porém, chamadas de emergência são possíveis para usuários pré-designados, através do uso de uma chave de acesso, a qual permite  inibir a resposta ao \emph{beacon}. Esta técnica não causa interferências e não requer nenhuma mudança nos STMs atuais. Por outro lado, tais dispositivos não são capazes de impedir o funcionamento de DMs  não compatíveis, fato que inviabiliza em muitas aplicações o seu desenvolvimento efetivo .
+%
+%
+ %deste tipo de dispositivos   mas requer aparelhos MD inteligentes e equipados com um receptor separado para o sistema de beacon. Dispositivos do tipo B nIsso não vai impedir o funcionamento normal para terminais legados compatíveis dentro da ``área silenciosa", tornando assim a implantação eficaz problemático para muitos anos.
+%
+
+%Enquanto os usuários desinformados gerais perderia funcionalidade, pré-designados os usuários de "emergência" pode ser informado de uma "seqüência de teclas do terminal de bypass" para inibir a resposta ao farol. 
+%Assumindo que o sistema de farol usa uma tecnologia com a sua própria licença (ou na banda isentos de licença), nenhuma alteração aos regulamentos são necessários para implantar um sistema desse tipo. Com este sistema, seria extremamente difícil de abuso policial da "seqüência de teclas de bypass" pelos usuários.
+
+\item \textbf{BTMs do tipo ``D"} - Este tipo de BTM comporta-se como uma ERB pequena, independente e portátil. Estes dispositivos podem interagir diretamente de forma, inteligente ou não-inteligente, com o funcionamento do STM alvo. O BTM funciona predominantemente no modo de recepção (passivo) e o SB é mantido ativo  apenas enquanto o MD tenta estabelecer uma conexão com  a ERB, caso contrário, o sinal é interrompido e o BTM volta para o modo passivo. Esta técnica tem a vantagem de menor poluição eletromagnética em termos de potência bruta transmitida e do espectro de frequência. Portanto, o sistema é menos prejudicial ao tráfego de sistemas vizinhos. Esta técnica pode ser implementada sem cooperação com as operadoras de telefonia móvel, mas pode impactar negativamente nestes. Esta técnica tem uma vantagem sobre o tipo ``B" por não gastar tempo ou esforço negociando com o STM. Assim como o tipo ``B", esta técnica também permite a realização de chamadas emergenciais.
+
+\item \textbf{BTMs do tipo ``E"} - Por último, os BTMs do tipo ``E" usam a técnica de supressão de  EMI (\emph{electromagnetic interference}, ou  interferência eletromagnética) para transformar uma determinada sala em uma \emph{gaiola de Faraday}\nomenclature{EMI}{Electromagnetic Interference}, a qual, essencialmente, bloqueia ou atenua significativamente as radiações eletromagnéticas e não as permite entrarem ou saírem da sala (ou gaiola). Esta técnica não permite a realização de chamadas emergenciais a menos que se providencie uma forma de receber e decodificar tais chamadas, e então, prover um cabo coaxial de dentro para fora da sala de forma a receber e re-transmitir o sinal.
+\end{itemize}
+Um resumo, em termos de principais aspectos de funcionamento dos BTM-A à ``D", é apresentado na Tabela \ref{tab:resumotiposjammer}.
+% Table generated by Excel2LaTeX from sheet 'Plan1'
+\begin{table}[!ht]
+  \centering
+  \caption{Resumo das principais características dos diferentes tipos de BTM.}
+    \begin{tabular}{|c|>{\centering\arraybackslash}m{1.5in}|>{\centering\arraybackslash}m{1.5in}|>{\centering\arraybackslash}m{1.5in}|}
+    \hline
+    Tipos de BTM & Complexidade de implementação & Exige cooperação com a OTC & Chamadas emergenciais \\
+    \hline
+    A     & Baixa & Não   & Não \\ \hline
+    B     & Alta  & Sim   & Sim \\ \hline
+    C     & Alta  & Não   & Sim \\ \hline
+    D     & Média & Não   & Sim \\ \hline
+    E     & Alta  & Não   & Não \\ \hline
+    
+    \end{tabular}%
+  \label{tab:resumotiposjammer}%
+\end{table}%
+
+\section{Estado da Arte em Bloqueadores de Telefonia Móvel do Tipo A }
+Como explicado, embora existam muitos tipos de BTMs \cite{Jisrawi2006}, o mais comum e simples são os do tipo ``A", no qual o BTM visa a interromper a comunicação do STM por poluição espectral, ou seja, transmitindo um SB-RF nas mesmas frequências usadas por este para se comunicar. O objetivo é  deteriorar a razão sinal-ruído (RSR) \nomenclature{RSR}{Razão Sinal-Ruído} do sistema alvo a níveis que tornem a comunicação impossível. 
+
+Um modelo simplificado de comunicação  para BTM-A é apresentado na   Figura~\ref{fig:jammertypeAtransmit}.
+\begin{figure}[h!]%
+\centering
+\includegraphics[width=0.6\columnwidth]{./figure/jammer_type_A_transmit}%
+\caption{Modelo de comunicação simplificado para BTM-A.}%
+\label{fig:jammertypeAtransmit}%
+\end{figure} 
+
+O SB pode ser aplicado tanto na faixa de espectro reservado para o \emph{downlink} (DL) (transmissão da ERB para DM),  assim como no reservado para o \textit{uplink} (UL) (transmissão do DM para ERB).  No entanto, aplicar o bloqueio no DL é menos dispendioso em termos de potência total transmitida, devido ao BTM ser geralmente instalado próximo aos DMs alvos.
+
+Para BTMs do tipo ``A'', o uso de estratégias de múltiplo acesso pelo SM, como por exemplo, OFDMA e TDMA, são irrelevantes. 
+%Um aspecto importante é que para BTMs do tipo ``A'', a existência de estratégias de multiplexação diferentes de divisão-em frequência (FDM) \nomenclature{FDM}{Frequency Division Multiplexing} é irrelevante. 
+Por exemplo, mesmo que a comunicação ocorra em intervalos de tempo (\emph{timeslots}), o BTM gera o SB ininterruptamente. Assim, o canal de comunicação é representado aqui pela sua largura de banda $B_c$ (por exemplo, $B_c=200$~kHz em um sistema GSM) e sua frequência da subportadora $f_c^{RF}$.  
+
+A faixa de frequência coberta pelo BTM-A pode variar significativamente de aplicação para aplicação \cite{poisel2011}. O SB pode ser aplicado apenas nos canais de controle (por exemplo, no canal 0 com  $B_c=200$~kHz de uma determinada célula de um sistema GSM~\cite{sauter2010})  ou em toda a banda (por exemplo, sobre 25 MHz para um sistema GSM com 124 canais). Desta forma, o BTM-A é subdividido aqui em BTM-Ac e BTM-Af, respectivamente.
+
+BTM-Ac são descritos em \cite{Pousada98, Divya12, Patel12} onde, em um cenário GSM, o SB é aplicado a canais de controle pré-selecionados. Esta técnica, por vezes referida como bloqueio inteligente, requer o conhecimento, a priori, das ARFCNs (\textit{absolute radio frequency channel}) \nomenclature{ARFCN}{Absolute Radio Frequency Channel} dos canais de controle e o bloqueio é normalmente restrito a alguma área específica. Por outro lado, este método reduz a poluição espectral e  potência bruta transmitida, mas é dependente da RAT.
+ 
+%Quando aplicada a sistemas de GSM, por exemplo, duas abordagens principais foram apresentados nos últimos anos 
+%\cite{sbeeh2008}. A primeira é baseado na geração de um RF-DS em toda a gama do espectro utilizados pelo alvo GSM MS, geralmente. Estes podem ser feitos tanto no downlink (BS para MS) banda de frequência ou no uplink (MS a BS) banda de frequência. MPJ sistemas baseados neste método são apresentados em \ cite {Mishra2009, Sambhe2008, Shah2008}. A segunda abordagem, apresentado em \ cite {Pousada98, Divya12, Patel12}, é baseado no ajuste de um RF-DS para algumas freqüências específicas, geralmente na frequência do canal controlador do GSM MS. Esta técnica, por vezes referido como bloqueio inteligente, requer algum conhecimento sobre o sinal alvo eo bloqueio é normalmente restrita a alguma área específica. Por outro lado, esta técnica pode reduzir significativamente a complexidade e custo do sistema em termos do processo de geração de RF-DS. 
+
+Em \cite{Pousada98}, o sistema de bloqueio monitora a potência recebida em um local fechado gerada por portadoras emitidas pelas ERB's vizinhas. Em seguida, transmite o SB nas mesmas frequências e potência dos sinais de sinalização para perturbar o processo de controle e impedir a comunicação entre a ERB e os DMs. Em uma abordagem similar \cite{Divya12}, o SB é transmitido apenas quando o a potência dos sinais de sinalização excede um limiar predefinido.
+
+BTMs-Af foram investigados em \cite{ Mishra2009, Sambhe2008, Shah2008}, onde o SB é transmitido em todos os canais de um determinado sistema de comunicação.
+%
+%\textbf{PT:FALTA TEXTO}
+%, de modo a cobrir toda a banda de comunicação do sistema alvo.
+
+A maioria dos trabalhos anteriores em BTM-A adotam processamento analógico para gerar o SB-BB, onde o processo é tipicamente realizado por meio de um oscilador controlado por tensão (VCO-\emph{voltage controlled oscilator}, em inglês) a partir de uma forma de onda triangular ou por uma rampa. O SB gerado é um sinal de varredura em frequência, onde o tempo  e o passo são geralmente controlados por um micro-controlador \cite{Divya12, Patel12, Mishra2009, Sambhe2008, Shah2008, Jisrawi2006}. 
+
+Este método normalmente emprega circuitos integrados (CI) \nomenclature{CI}{Circuito integrado} e/ou componentes discretos \cite{Sambhe2008} no projeto do hardware do BTM. Deta forma, a precisão, em termos das componentes frequenciais geradas, é altamente dependente do desempenho de tais componentes. Por exemplo, resistores e capacitores são usados para definir a frequência de uma onda triangular usada para sintonizar o VCO \cite{sbeeh2008}. A frequências de saída do VCO é controlada pelos valores de capacitância e resistência usadas. Porém, tais valores são geralmente definidos com tolerâncias ($ 1 \%, 5 \% $, etc) e também são sensíveis às mudanças de temperatura, o que pode causar variações significativas, imprevisíveis e incontroláveis nas frequência de saída do VCO. Como resultado, o VCO pode produzir componentes em frequências fora da faixa desejada e, consequentemente, interferir com os sistemas de transmissão vizinhas.
+
+Nota-se que o projeto de um BTM, seja este de que tipo for, exige conhecimentos específicos do STM alvo. Por exemplo, é necessário conhecer a largura de banda usada na transmissão, a faixa de espectro ocupada, as frequências das subportadoras, etc.
+Assim, para que esta proposta possa apresentar discussões concretas na próxima seção são introduzidos duas RATs: GSM e LTE, que são das mais importantes em termos comerciais. O objetivo é introduzir conceitos referentes às características básicas destes sistemas, principalmente no que se refere a estrutura da camada física para transmissão de dados.
+%Uma técnica diferente de bloqueio baseada em distorção espectral é apresentada em \cite {Shah2008}, onde o sistema de bloqueio atua como um repetidor. O processo consiste em capturar os sinais do STM em sua vizinhança, distorcer-la, amplifica-la  e em seguida retransmiti-la para bloquear a comunicação dos DM vizinhos. Simplicidade e baixo custo são as principais vantagens deste sistema, pois não há necessidade de projetar um sistema de geração do SB, entretanto, esta técnica pode apresentar alguns problemas. Por exemplo, as antenas transmissora e receptora devem trabalhar na mesma frequencia, a fim de receber e retransmitir o sinal desejado. Assim, o sinal transmitido será realimentado para a antena receptora e amplificados. Isso provavelmente fará com que o amplificador entre em saturação. Outro aspecto importante é a falta de controle das emissões fora da banda e conseqüente distúrbio espectral dos sistemas de comunicação vizinhos.  que sejam usados filtros para limitar a banda. 
+
+\section{Conceitos de Sistemas de Telefonia Móvel: GSM e LTE}
+Nesta seção são apresentados conceitos introdutórios sobre dois STMs: GSM e LTE. O objetivo é fornecer uma visão simplificada do funcionamento destes sistemas no que se refere a estrutura da camada física dedicada à transmissão de dados,
+    %insigth para entendimento da estrutura dos canais de comunicação de dados 
+ %aplicação  . A seção se dedica mais na definição da estrutura e funcionamento da camada física dos dois sistemas,
+ com ênfase nas técnicas de duplexação, bandas de espectro, métodos de acesso e canais de comunicação de dados. Tais conceitos são  fundamentais para o desenvolvimento de estratégias, algoritmos e  técnicas de bloqueio aplicados a estes sistemas.
+
+\subsection{Sistemas GSM}
+GSM é um padrão digital de celular desenvolvido na Europa na década de 1980. O padrão GSM foi criado pela ETSI (european telecommunications standards institute) \nomenclature{ETSI}{European Telecommunications Standards Institute} e atualmente é desenvolvido pela 3GPP (\emph{Third Generation Partnership Project})\nomenclature{3GPP}{Third Generation Partnership Project}. 
+GSM é atualmente o padrão mais popular para telefonia móvel com mais de 4,4 bilhões de assinantes em mais de 200 países (junho de 2014)\cite{4gamericas}. O GSM foi primeiramente desenvolvido para dar suporte a transmissão de voz e dados usando técnicas de modulação digital.
+
+%PT: Porquê falar de GSM e LTE.
+
+
+Os sistemas GSM utilizam FDD (\emph{Frequency Division Duplex} ou duplexação por divisão de frequência).
+%e TDD (\emph{Time Division Duplex}) simultaneamente. 
+Devido ao FDD, o UL e o DL utilizam bandas de frequências distintas para comunicação. As bandas de UL e DL formam um par separado em frequência (\emph{offset}), quer por 45~MHz,  80~MHz ou 95~MHz, dependendo do sistema GSM. Por exemplo, na Figura~\ref{fig:GSMDLULGSM800} é apresentado o esquema FDD do GSM800.
+%o esquema FDD e as bandas de frequência de UL e DL para um sistema GSM800 é apresentado 
+
+\begin{figure}[!ht]%
+\includegraphics[width=\columnwidth]{./figure/GSM_DL_UL_GSM800}%
+\caption{Bandas de frequência de UL e DL para um sistema GSM800.}%
+\label{fig:GSMDLULGSM800}%
+\end{figure}
+
+Os sistemas GSM usam faixas de espectro, \textit{offsets}, e larguras de banda padronizadas. Algumas delas são listadas na Tabela~\ref{tab:gsmfreqbandbrasil}.
+ %Algumas faixas de espectro usadas nos sistemas GSM, suas respectivas largura de banda e separações entre UL e DL são apresentadas na Tabela~\ref{tab:gsmfreqbandbrasil}.
+ 
+\begin{table}[!ht]%
+\centering
+\caption{Algumas bandas de frequência tipicamente usadas nos sistemas GSM.}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Sistema GSM  & UL(MHz)									& DL (MHz) 						& Largura de banda (MHz) & Separação (MHz) \\ \hline
+GSM850   &  824 -849   								  & 869- 894       						&	 		 25        			 	&  		45                  \\ \hline
+GSM900   &  890-915                     & 935-960                   &  	   25	              &     45 						
+\\ \hline
+GSM1800  &  1710-1785     							& 1805-1880 								&      75     			    & 	 	95  								\\ \hline 
+GSM1900  &  1850-1910    								& 1930-1990									&      60               &	    80									\\ \hline
+
+\end{tabular}
+\label{tab:gsmfreqbandbrasil}
+\end{table}
+
+Em termos de métodos de acesso ao canal, são usados dois métodos para permitir a comunicação simultânea de vários usuários com a ERB e, assim, aumentar a capacidade do sistema. 
+O primeiro método é o FDMA (\emph{frequency division multiple access}) ou acesso múltiplo por divisão de frequência, o qual consiste na divisão da banda total de frequência em $n$ sub-portadoras ou canais espaçadas de $\Delta_f^{GSM}=200$~kHz com aproximadamente a largura de banda $B_c=200$~kHz cada, como apresentado na Figura~\ref{fig:GSMFDMA}.%. Este esquema permite a comunicação simultânea de vários usuários com  a ERB em frequências distintas.
+\begin{figure}[!ht]%
+\includegraphics[width=\columnwidth]{./figure/GSM_FDMA}%
+\caption{Ilustração de divisão de banda usando FDMA para GSM800.}%
+\label{fig:GSMFDMA}%
+\end{figure}
+
+O segundo método usado é o TDMA (\emph{time division multiple access}) ou acesso múltiplo por divisão de tempo, o qual permite que vários usuários compartilhem o mesmo canal de frequência em intervalos de tempo (\emph{timeslots}) diferentes. A estrutura básica de múltiplo acesso para um sistema GSM com largura de banda de 25~MHz é apresentada na Figura~\ref{fig:GSMFDMATDMA}. Neste esquema, cada canal de frequência de 200~kHz é compartilhado por oito usuários, cujos dados são transmitidos em intervalos de tempo com duração de $577 \mu$s (1 \emph{slot}). Um conjunto de oito \emph{slots} constitui um quadro (\emph{frame}) TDMA, transmitido a cada 4.615~ms ($8\times 577 \mu$s).
+
+\begin{figure}[!ht]%
+\includegraphics[width=\columnwidth]{./figure/GSM_FDMA_TDMA}%
+\caption{Esquema de alocação de recursos tempo-frequência em sistemas GSM.}%
+\label{fig:GSMFDMATDMA}%
+\end{figure}
+
+%Nos sistemas GSM, a largura de banda de frequência total UL ou DL é dividido em $n$ canais com largura de banda de $B_c=200$~kHz cada. Assim, o número de canais ou, em outras palavras, a capacidade do sistema é determinada pela largura de banda total do sistema. Por exemplo, o GSM850 possui possui uma $BW=45$~MHz, o que resulta em total de $124$ canais considerando as faixas de guarda de $100$~kHz.
+
+%To understand the GSM system frequency management let us take a look in the Figure \ref{fig:gsmstructure}. The firs think to note is that 
+%GSM uses two methods for frequency management: FDMA (frequency division multiple access) and TDMA (time-division multiple access). FDMA divides the system bandwidth in BW/200 channels (including the guardband) of $200$~kHz bandwidth and TDMA divide each of this channels in 8 time slots.
+%Example of a GSM structure for dwonlink band is presented in Figure \ref{fig:gsmstructure}. Each channel  is shared by eight users in a TDMA (time-division multiple access) fashion. Each user data are transmitted over time slots  with duration of $577 \mu$s and one TDMA frame, which is formed by $8$ time slots, is transmitted every $4,615$ms ($8 \times 577\mu$s).
+%The GSM system capacity in terms of number of channels can be calculated by dividing a GSM system bandwidth by $200$~kHz  (single channel bandwidth). For example, for GSM-900 we have,  $250/2$, which results in a total of $124$ sub-channels of $200$~kHz bandwidth and two band guard of $100$~kHz.
+%To allow the base station to communicate with several
+
+%subscribers simultaneously, two methods are used. The first method is frequency division multiple
+%access (FDMA), which means that users communicate with the base station on different frequencies.
+%The second method used is time division multiple access (TDMA) (see Figure 1.22). GSM uses carrier
+%frequencies with a bandwidth of 200 kHz over which up to eight subscribers can communicate with
+%the base station simultaneously as shown in Figure 1.22.
+%Quantas operadas
+%Quantos telefones com GSM
+
+
+%Uma rede GSM é geralmente composta por várias ERBs distribuídas em uma determinada área (cidade), cujas área de cobertura são chamadas de células. Para evitar interferências,  células vizinhas devem operar em frequências diferentes . Porém, para células não adjacentes é possível a  reutilização das frequências. 
+ %\ignorar {e cada é identificada pela CI (Cell Identity)}. 
+%. As the emissions of different base stations of the network must not interfere with each other, all neighboring cells have to send on different frequencies. As can be seen from Figure , 
+
+Os sistemas GSM usam uma variedade de canais para transmissão de informações. Estes canais são divididos em dois grupos: canais físicos e canais lógicos. Os canais físicos são determinados pelos \emph{timeslots}, enquanto que os canais lógicos são caracterizados de acordo com o tipo de informação  transmitida nos canais físicos.
+
+Os canais lógicos, por sua vez, são divididos em dois grupos: canais de tráfego (TCH - \emph{trafic channels}) e canais de controle. Os TCH são canais destinados ao usuário para  transmissão de voz ou de dados \cite{tolstrup2011}, enquanto que os canais de controle são usados para gerenciar toda a parte de sinalização para a gestão da mobilidade, controle de tráfego, etc \cite{tolstrup2011}. 
+
+%O principal canal de informação de uma célula é chamada de BCCH (\emph{broadcast common control channel }) ou canal  de controle comum de difusão. O BCCH é um canal de DL responsável pela transmissão de diversas informações sobre o estado da rede para todos os DM em modo de espera (não envolvidos em uma conexão de chamada ou sinalização) \cite{sauter2010}. Dentre as informações de difusão estão: O CI (\emph{cell identity})  ou identidade da célula, o LAC (\emph{local area code}) ou código da área de localização, o MCC (\emph{mobile country code}) ou código móvel do país, o MNC (\emph{mobile network code}) ou  código da rede móvel e as ARFCNs (\emph{absolute radio-frequency channel numbers})  usadas pelas ERBs vizinhas. 
+%Por padrão o BCCH é atribuída utilizando TSL0 do primeiro canal de rádio na célula. 
+
+%\subsubsection{The GSM control channel}
+%GSM channels are divided into traffic (TCH) and control channels. TCH is a user channel used for  voice or data transmission \cite{tolstrup2011}. Control channels are channels used to handle all the signaling for the mobility management, traffic controls, etc \cite{tolstrup2011}. channels that transmit different types of network information. There are many types of control channels, however, the definition of all of the is out of the scope of this work. Therefore for sake of simplicity we will limit to describe only a few of them.  
+%
+%The Broadcast Common Control Channel (BCCH) is a downlink-only channel and is the main information channel of a cell. The BCCH broadcasts system messages with several information about the network to the mobile devices that are on idle mode (not engaged in a call or signaling connection)\cite{sauter2010}. Among the broadcast information are: The cell ID and location area code (LAC), \ignore{The Mobile Country Code (MCC), The Mobile Network Code (MNC),} and the absolute radio-frequency channel numbers (ARFCNs) used by neighboring BTSs.
+%BCCH is assigned using TSL0 of the first radio channel in the cell. 
+
+\subsection{Sistemas LTE}
+O LTE é a evolução do UMTS (\emph{universal mobile telecommunication system} ou sistema universal de telecomunicações móveis)  e constitui uma das mais recentes etapas de uma série de avanços de sistemas de telecomunicações móveis, juntamente com o LTE ``Advanced'' \cite{sesia2011lte}. O desenvolvimento dos sistemas LTE pela 3GPP começou em 2004 e a primeira versão foi disponibilizada na versão 8 da série de especificações da 3GPP. O LTE  é totalmente baseado em comutação de pacotes e seu objetivo é fornecer um desempenho superior aos das redes 3GPP anteriores baseadas em HSPA (\emph{high-speed packet access} ou acesso a pacotes em alta velocidade), em termos de taxa máxima de dados, eficiência espectral,  menor latência no plano do usuário e plano de controle e uma tecnologia de acesso de rádio otimizada e baseada em pacotes.
+%pequena introdução
+%LTE is the successor technolog y not only of UMTS but also of CDMA 2000.
+%LTE is important because it will bring up to 50 times performance improvement and muchbetter spectral
+%efficiency to cellular networks.
+%LTE introduced to g et higher data rates, 300Mbps peak downlink and 75 Mbps peak uplink. Ina 20MHz
+%carrier, data rates beyond 300Mbps canbe achieved under very g ood signal conditions.
+%LTE is anidealtechnolog y to support highdate rates for the services suchas voice over IP (VOIP),
+%streaming multimedia, videoconferencing or evena high-speed cellular modem.
+
+%Em termos de taxa de dados, 
+O LTE (por LTE assume-se aqui a versão 8) promete fornecer uma taxa máxima de dados de DL de 300~Mbps e de UL de 75~Mbps para uma alocação de espectro de 20~MHz.
+
+LTE suporta tanto FDD como TDD %(\emph{time division duplex} o duplexação por divisão de tempo)
+e combina dois esquemas distintos de acesso múltiplo  para DL e UL (Figura~\ref{fig:LTESCOFDMAOFDMA}) \cite{holma2010lte}. Um exemplo de 3 bandas de operação e seus respectivos modos de duplexação para sistemas LTE é apresentado na Tabela~ \ref{ltebands}%.
+ %Em FDD o UL e o DL usam bandas de frequências diferentes, enquanto que no TDD usam a mesma banda de frequência em intervalos de tempos diferentes.
+\begin{table}[htbp]
+  \centering
+  \caption{Exemplo de 3 bandas de operação e seus respectivos modos de duplexação para sistemas LTE.}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Banda Oper.} & \textbf{Uplink (MHz)} & \textbf{Downlink(MHz)} & \textbf{Modo de duplexação} \\\hline 
+    1     & 1920-1980   & 2110-2170  & FDD \\ \hline
+    2     & 1850-1910   & 1930-1990  & FDD \\ \hline
+    %3     & 1710-1785   & 1805-1880  & FDD \\ \hline
+    %4     & 1710-1755   & 2110-2155  & FDD \\ \hline
+    5     & 824-849     & 869-894    & FDD \\ \hline
+    33    & 1900-1920   & 1900-1920  & TDD \\ \hline
+    34    & 2010-2025   & 2010-2025  & TDD \\ \hline
+    %36    & 1930-1990   & 1930-1990  & TDD \\ \hline
+    \end{tabular}%
+  \label{ltebands}%
+\end{table}%
+
+
+
+No DL, o esquema de múltiplo acesso é o OFDMA (\emph{orthogonal frequency division multiple access} ou acesso múltiplo por divisão ortogonal de frequência), onde a banda total é dividida em sub-bandas ou subportadoras ortogonais entre si  e espaçadas de $\Delta_f^{LTE} = 15$~kHz. Cada subportadora é atribuída a um usuário diferente, o que permite transmissão simultânea de vários usuários em frequências diferentes. 
+
+No UL, o esquema de múltiplo acesso é o SC-FDMA (\emph{single carrier frequency division multiple access} ou acesso múltiplo por divisão de frequencia e portadora única), onde a alocação de banda é realizada de forma contígua de forma a possibilitar a transmissão de portadora única. 
+
+\begin{figure}[!h]%
+\includegraphics[width=\columnwidth]{./figure/LTE_SC_OFDMA_OFDMA}%
+\caption{Esquemas de múltiplo acesso para DL e UL nos sistemas LTE.}%
+\label{fig:LTESCOFDMAOFDMA}%
+\end{figure}
+
+O LTE foi projetado para suportar larguras de banda de transmissão diferentes, selecionadas dentre 1,4, 3, 5, 10, 15 e 20~MHz, dependendo da faixa do espectro  disponível. 
+Assim, a quantidade de recursos disponíveis depende da banda usada pelo sistema.
+
+A estrutura detalhada dos recursos para DL (prefixo cíclico normal) para uma banda de 1,4~MHz é apresentada na Figura~\ref{fig:lte_dl_resource}. Os recursos tempo-frequência para cada antena transmissora são divididos de acordo com a seguinte estrutura: No domínio de tempo, a maior unidade é o \emph{frame} de rádio de 10~ms, o qual é subdividido em dez \emph{subframes} de 1~ms cada. Cada \emph{subframes}  é dividido em dois \emph{slots} de 0,5~ms e cada \emph{slot} compreende sete símbolos OFDM. 
+
+\begin{figure}[!h]%
+\centering
+\includegraphics[width=0.8\columnwidth]{./figure/LTE_recurso_tempo_frequencia}%
+\caption{Estrutura de recursos tempo frequência para DL nos sistemas LTE.}%
+\label{fig:lte_dl_resource}%
+\end{figure}
+
+No domínio da frequência, os recursos são agrupados em unidades de 12 subportadoras (ocupando assim um total de $B_c =180$~kHz, com um espaçamento de subportadora de 15~kHz), de tal modo que uma unidade de 12 subportadoras para uma duração de um \emph{slot} é denominado de bloco de recursos (BR). A menor unidade de recurso é o elemento de recurso (ER), que consiste em uma subportadora para a duração de um símbolo OFDM. Portanto, um BR compreende 84 ER.
+% Table generated by Excel2LaTeX from sheet 'test'
+Na Tabela~\ref{tab:bwvsRB} são exemplificados esses parâmetros. %apresentado o BW, RB, 
+
+% Table generated by Excel2LaTeX from sheet 'test'
+\begin{table}[h!]
+  \centering
+  \caption{Exemplos de parâmetros do LTE.}
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    BW do canal (MHz) & Num. de RBs & Num. de ER & BW ocupada (MHz) & Subportadoras \\
+    \hline
+    1.4   & 6     & 504   & 1.08  & 72	\\
+    \hline
+    3     & 15    & 1260  & 2.7   & 180 \\
+    \hline
+    5     & 25    & 2100  & 4.5   & 300 \\
+    \hline
+    10    & 50    & 4200  & 9.0   & 600 \\
+    \hline
+    15    & 75    & 6300  & 13.5  & 900 \\
+    \hline
+    20    & 100   & 8400  & 18    & 1200 \\
+    \hline
+    \end{tabular}%
+  \label{tab:bwvsRB}%
+\end{table}%
+
+A alocação de recursos no domínio da frequência, tanto no UL como no DL,  é realizada de forma dinâmica com resolução de 180~kHz.
+A alocação de recursos para um usuário específico é contíguo no UL para permitir a transmissão de portadora única, enquanto que no DL esta alocação é realizada de forma livre em diferentes áreas do espectro. 
+
+
+
+
+
+%In cellular systems, the basic System Information (SI) which allows the other channels in
+%the cell to be configured and operated is usually carried by a Broadcast CHannel (BCH).
+%Therefore the achievable coverage for reception of the BCH is crucial to the successful
+%operation of such cellular communication systems; LTE is no exception.As already noted
+%in Chapter 3, the broadcast (SI) is divided into two categories:
+%The ‘Master Information Block’ (MIB), which consists of a limited number of the most
+%frequently transmitted parameters essential for initial access to the cell,1 and is carried
+%on the Physical Broadcast CHannel (PBCH).
+%• The other System Information Blocks (SIBs) which, at the physical layer, are
+%multiplexed with unicast data transmitted on the Physical Downlink Shared CHannel
+%(PDSCH) as discussed in Section 9.2.2.2.
+
+
+
+%In order to communicate with an eNodeB supporting one or more cells, the UE must first
+%identify the downlink transmission from one of these cells and synchronize with it. This is
+%achieved by means of special synchronization signals which are embedded into the OFDM
+%structure described above.
+%
+%\begin{figure}%
+%\includegraphics[width=\columnwidth]{./figure/LTE_DL_channels_mapping}%
+%\caption{}%
+%\label{}%
+%\end{figure}
+%
+%A estrutura geral PBCH resultante é mostrada na Figura 9.1. Detectabilidade sem o UE ter conhecimento prévio de a largura de banda do sistema é conseguida através do mapeamento do PUCCH apenas para as centrais de 72 subportadoras o sinal OFDM (que corresponde à largura de banda de sistema LTE mínimo possível de 6 blocos de recurso (RBS)), independentemente da efectiva largura de banda do sistema.
+
+%The UE will have first identified the system centrefrequency from the synchronization signals as described in Chapter 7.
+%the MIB it is repeated every 40 ms
+%
+%LTE is the successor technolog y not only of UMTS but also of CDMA 2000.
+%LTE uses bothTime DivisionDuplex (TDD) and Frequency DivisionDuplex (FDD) mode. InFDD uplink
+%and downlink transmissionused differentfrequency, while inTDD bothuplink and downlink use the same
+%carrier and are separated inTime.
+
+%LTE supports flexible carrier bandwidths, from1.4 MHz up to 20 MHz as well as bothFDD and TDD.
+%LTE designed witha scalable carrier bandwidthfrom1.4 MHz up to 20 MHz whichbandwidthis used
+%depends onthe frequency band and the amount of spectrumavailable witha network operator.
+
+
+%The UE chooses a suitable cell of the selected Public Land Mobile Network (PLMN)
+%based on radio measurements. This procedure is known as cell selection. The UE starts
+%receiving the broadcast channels of that cell and finds out if the cell is suitable for
+%camping, which requires that the cell is not barred and that radio quality is good enough.
+%After cell selection, the UE must register itself to the network thus promoting the selected
+%PLMN to the registered PLMN. If the UE is able to find a cell that is deemed a better
+%candidate for reselection according to reselection criteria (section 7.2.2), it reselects onto
+%that cell and camps on it and again checks if the cell is suitable for camping. If the
+%cell where the UE camps does not belong to at least one tracking area to which the
+%UE is registered, location registration needs to be performed
+
+No que se refere à camada física de transmissão de dados, o LTE possui três canais de DL e dois de UL. Os canais físicos de dados de DL são 
+%O LTE possui três canais físicos de dados de downlink 
+\cite{sesia2011lte, holma2010lte}: 
+o PBCH (\emph{physical broadcast channel}), o PDSCH (\emph{physical downlink shared channel}) e PMCH (physical multicast channel). PBCH é o canal físico responsável pela transmissão da categoria MIB (\emph{Master Information Block}) das informações do sistema (IS), necessários para  o acesso dos dispositivos ao sistema. O MIB é o bloco de informação mais importante do sistema e  consiste dos parâmetros essenciais para o acesso inicial da célula, como largura de banda de DL. O MIB é transmitido a cada 40~ms. Ao canal PBCH é sempre atribuída uma largura de banda de 1,08~MHz (72 subportadoras) independente da largura de banda do sistema e o mesmo é sempre alocado no centro da banda disponível do sistema.
+
+O PDSCH é o principal canal de suporte de dados do DL. O PDSCH é usado para transmissão de todos os dados do suário, bem como para a transmissão de ISs, os quais não são transmitidos no PBCH, e também para mensagens de \emph{paging}. 
+Por último, há o PMCH que é um canal projetado para transportar dados para MBMS (\emph{multimedia broadcast
+and multicast services}) ou serviços de difusão e de multicast de multimídia.
+
+Os canais físicos de dados de UL são: o PUSCH (\emph{physical uplink shared channel}) e o PRACH (\emph{physical random access channel}). O PUSCH é o canal mais importante de UL e sua principal tarefa é de transmitir os dados do usuário e informações de sinalização. O PRACH é o canal responsável pela sincronização e solicitação de recursos iniciais de UL e também pelo envio de resposta a mensagens de \emph{paging} .
+
+A taxa de dados momentânea de um usuário varia em função da alocação de recursos de UL dependendo da largura de banda momentaneamente alocada. O dobro da largura de banda resulta no dobro da taxa de dados. A largura de banda alocada varia entre  0 e 20~MHz em passos de 180~kHz. 
+
+Existem outros canais físicos adicionais para UL e DL, mas estes são usados apenas para controle de informações na camada física, suas descrições podem ser encontradas aqui \cite{sesia2011lte, holma2010lte}.
+%
+%Em sistemas celulares, as informações do sistema básico (SI), que permite que os outros canais na célula a ser configurado e operado é geralmente realizada por um canal de difusão (BCH). Portanto, a cobertura possível para recepção do BCH é crucial para o bom funcionamento de tais sistemas de comunicação celular; LTE há exception.As já observado no Capítulo 3, a transmissão (SI) é dividido em duas categorias: o 'Master Informações Bloco' (MIB), que consiste em um número limitado de parâmetros mais freqüentemente transmitida essenciais para o acesso inicial a da célula, e é realizada no canal de transmissão Física (PBCH).
+%
+%
+%Synchronization Sequences and Cell Search in LTE
+%The cell search procedure in LTE begins with a synchronization procedure which makes use
+%of two specially designed physical signals that are broadcast in each cell: the Primary Synchronization
+%Signal (these two signals not only enables time and frequency synchronization, but also provides the
+%UE with the physical layer identity of the cell and the cyclic prefix length, and informs the UE
+%whether the cell uses Frequency Division Duplex (FDD) or Time Division Duplex (TDD).
+%In the case of initial synchronization (when the UE is not already camping on or
+%connected to an LTE cell) after detecting the synchronization signals, the UE decodes the
+%Physical Broadcast CHannel (PBCH), from which critical system information is obtained
+%(see Section 9.2.1). In the case of neighbour cell identification, the UE does not need to
+%decode the PBCH; it simply makes quality-level measurements based on the reference signals
+%(see Chapter 8) transmitted from the newly detected cell and uses them for cell reselection
+%(in RRC_IDLE state) or handover (in RRC_CONNECTED state); in the latter case, the UE
+%reports these measurements to its serving cell.
+
+
+\section{Conceitos de Classificação de Tecnologia de Acesso via Rádio}
+Nesta seção são introduzidos alguns conceitos básicos sobre classificação de tecnologias de acesso via Rádio (RATc) e uma breve revisão bibliográfica sobre o estado da arte é apresentada e discutida. 
+
+%No ponto de vista de projeto de bloqueadores
+%
+%EXPLICAR O QUE É RATC DE FORMA GERAL
+
+RATc é um conjunto de técnicas usadas para classificar padrões de RATs através  de processamento de sinais aplicado à extração de características específicas de uma determinada RAT, seguida de um módulo de inteligência computacional que faz a classificação (usando, por exemplo, regras, árvore de decisão, redes neurais, etc.). 
+%RATc é geralmente aplicada em situações onde ocorrem compartilhamento de espetro entre RATs ou em cenários de radio cognitivo \cite{CITAR}. 
+
+Através de RATc, o BTM pode se beneficiar para implementar um sistema eficiente capaz de adequar os seus parâmetros de geração e transmissão de SB de acordo com as RATs atuantes em uma determinada área do espectro em uma determinada área geográfica.
+
+Com o avanço da tecnologia, a contínua inovação e a introdução de novas tecnologias de comunicação sem fio é inevitável o compartilhamento de espectro entre diferentes RATs. 
+%a coexistência de  
+ %na área de comunicação sem fio o compartilhamento de espectro entre diferentes RATs já é uma realidade.
+%
+%A quantidade de serviços em redes sem fio heterogêneos-GSM, LTE, CDMA, etc., está crescendo de forma dramática. 
+ERBs modernas estão se tornando cada vez mais multi-portadoras e multi-padrões para melhorar a eficiência e a capacidade de gerenciamento.
+O conceito de ERBs de múltiplo-padrão (MSR-ERB), cuja padronização está sendo desenvolvida pela 3GPP e especificada na serie 3GPP TS37 \cite{3gppmsr}, já é uma realidade. Os MSR-ERBs transmissores e receptores irão suportar larguras de bandas maiores e incluir suporte não só para múltiplas portadoras de uma única RAT, mas também múltiplas RATs em um única ERB. Por exemplo, LTE, GSM e W-CDMA poderão ser transmitidas simultaneamente através de uma única MSR-ERB.
+
+%Next generation base station (BS) transmitters, and receivers, will support wider bandwidths and include not only multiple carriers (MCs) of a single radio format, but also multiple formats in one transmitter path. As an example, GSM, W-CDMA and LTE MCs can be transmitted from a single multi-standard radio (MSR) base station unit simultaneously. Having BS support multiple formats in a cellular network is important for network operators to save both BS size and cost
+%Por outro lado, em cenários de rádio cognitivo é comum transmissores licenciados podem compartilhar o  espectro com os não licenciados, torna-se necesário 
+
+Por outro lado, em cenários de rádio cognitivo, o compartilhamento do espectro é realizado entre usuários licenciados e não licenciados, onde diferentes RATs podem assumir a mesma faixa de espectro para transmissão em momentos diferentes.
+%entre usuários licenciados e não licenciados.
+%, TIRAR: {torna-se necessário} a identificação da referida RAT em uma determinada faixa de espectro em uma determinada área. Ainda, sistemas como LTE, por exemplo, possibilitam a coexistência com outras RATs, como, por exemplo GSM. 
+ %Ainda, quando se deseja aplicar o bloqueio de transmissões não autorizadas em uma determinada faixa de espectro.
+%Ainda, transmissão não autorizadas em uma determinada área geográfica podem ser identificadas e bloqueadas usando métodos pré-estabelecidos para estes tipos de transmissões.
+
+%Modern cellular base stations are becoming increasingly multi-carrier and multi-standard/multi-mode for improved efficiency and manageability. Primary among prospective multi-mode base station deployments will be those that are reconfigurable but also capable of simultaneous transmission of several types of cellular signals.
+
+%and adapts its transmission
+%parameters according to the changes in the radio environment.
+%In order to acquire information on the surrounding, CR needs
+%to detect and classify the on-the-air signals [1]–[3].
+%
+%
+%Important military and civilian applications include electronic warfare, spectrum monitoring 
+%and surveillance, and cognitive and software defined radios
+Neste contexto, torna-se importante projetar sistemas de BTM que sejam capazes de monitorar, identificar e classificar as RATs em uma determinada área geográfica e em seguida adaptar as suas características da geração e transmissão do SB de acordo com as RATs identificadas.
+ %Em um cenário de geração e transmissão automática do SB.
+%Neste contexto, tendo em vista que a geração e transmissão eficiente do SB requer o conhecimento a priori das características do sinal da RAT alvo, como por exemplo,  largura de banda e espaçamento entre as subportadoras, é importante então que o sistema 
+
+   %de que os do ponto de vista de gerar sinais de bloqueio de forma eficiente para bloquear a transmissão de um determinado RAT, o bloqueador deve ser capaz de primeiramente identificar a referida RAT e adaptar os parâmetros para geração e transmissão do sinal de bloqueio de acordo com a RAT.
+	%REPETIDO:
+%O sistema de BTM pode se beneficiar das técnicas  de sensoriamento espectral para monitorar áreas específicas do espectro e classificar as RATs atuantes nestas áreas e, assim, gerar o SB de acordo com as características predefinidas para estas RATs. 
+O sensoriamento espectral não apenas permitirá rastrear de forma dinâmica as mudanças no ambiente e habilitar o bloqueio de forma eficiente de todas as RATs licenciadas em uma determinada área geográfica, mas também permitirá identificar e potencialmente bloquear transmissões não autorizadas através de métodos pré-estabelecidos para geração e transmissão de SB para estes cenários.
+%No entanto, como dito anteriormente, a geração eficiente do SB requer algum conhecimento das características espectrais da RAT alvo, tais como o espaçamento entre os canais $\Delta_f$ e suas larguras de banda $B_c$. 
+
+
+Geralmente, a RATc é realizada através de análises das características espectrais ou temporais ou pela combinação de ambas do sinal da RAT. A classificação é beneficiada pelo fato dessas características serem geralmente pré-definidas e algumas delas serem  únicas. 
+%Daí, a análise correta e a separação dessas  características  podem permitir a identificação de um determinado RAT de forma cega, ou seja, sem nenhuma informação a priori.
+
+%A identificação de um determinado RAT é geralmente realizada através da análise das caracteríscticas espectrais ou temporais   
+
+
+Um diagrama em blocos representativo de uma  RATc é apresentado na Figura~\ref{fig:ratcblockdiag}. O processo de classificação é realizada capturando o sinal de interesse em uma determinada área e banda do espectro através de uma antena. O sinal capturado é amostrado e processado  usando algoritmos específicos para extração das características espectrais (por exemplo, PSD, largura de banda, frequência da portadora, etc.) ou temporais (prefixo cíclico, cicloestacionaridade, etc.),  ou ambas do sinal da RAT. Em seguida, as características extraídas são processadas pelo classificador, que então sugere a RAT como a classe de saída. O classificador pode ser um simples comparador que contrasta os parâmetros de entrada com outros pré-armazenadas em uma base de dados, e então seleciona a RAT com maior semelhança. Outros tipos de classificadores (como redes neurais, por exemplo) incorporam a informação acerca das RATs em matrizes de pesos que são calculadas na fase de treino do classificador.
+
+\begin{figure}[!htt]%
+\centering
+\includegraphics[width=\columnwidth]{./figure/ratc_block_diag}%
+\caption{Diagrama em blocos simplificado representativo de um classificador de RAT.}%
+\label{fig:ratcblockdiag}%
+\end{figure}
+%COLOCAR UM DIAGRAMA EM BLOCOS
+ %extração, executa uma análise que pode ser baseada no domínio da frequência ou do tempo ou ambos.
+%
+%%Geralmente, no domínio da frequência são analisadas a potência em uma determinada largura de banda, o formato da PSD,  a frequência da portadora, etc. 
+%%e extrai as características espectrais ou temporais ou ambos do sinal. 
+%Essas características são comparadas com as pré-armazenadas em um banco de dados para diferentes padrões de RAT e, então, seleciona-se a  RAT que detém as mesmas características.
+%
+%COM SAÌDAS DO CLASSIFICADOR
+%
+%EXPANDIR O TEXTO, MAIS BIBLIO
+%
+%SE POSSÍVEL, INCLUIR PATENTES
+
+\subsection{Estado da Arte em  Classificação da Tecnologia de Acesso via Rádio}
+Nos últimos anos vários trabalhos foram desenvolvidos e apresentados na literatura na área de RATc. Dentre os algoritmos apresentados, duas principais abordagens ganharam destaque: Abordagens baseadas nas características espectrais e outras baseadas nas características temporais do sinal da RAT. 
+
+%Os algoritmos baseados no domínio da frequência  geralmente usam  na extração e análise das
+
+No domínio da frequência a classificação da RAT é realizada, predominantemente, através da análise de características espectrais relacionadas ao formato e à largura de banda da PSD do sinal da RAT, beneficiando-se do fato de que, para a maioria das RATs, tais características são predefinidas e padronizadas de acordo com a RAT. Por exemplo, em \cite{Palicot2003} a RATc é realizada através de uma identificação ``\emph{cega}" baseada na largura de banda do canal, onde o algoritmo de classificação  é baseado em redes neurais com funções de base radial (RBFNN) e a largura de banda da RAT é determinada através da comparação da PSD do sinal recebido com PSDs de referência pré-armazenadas para diferentes tipos de RATs (GSM, UMTS, etc.). Em seguida, escolhe-se a RAT com maior semelhança. 
+O autor estudou a classificação de várias RATs, como por exemplo, UMTS, GSM, PDC, etc. 
+
+Em \cite{Hachemani2007} o mesmo autor apresenta uma melhoria da técnica para diferenciar sinais com PSDs semelhantes, incluindo mais fatores de decisão como, por exemplo, o intervalo de guarda (GI) para discriminar entre sistemas de simples ou de multiportadoras.
+
+Em \cite{Aziz2013} o mesmo método é aplicado e combinado com um algoritmo de identificação baseado em símbolos pilotos com o objetivo de identificar RATs com a mesma largura de banda, como por exemplo, DVB-T (digital video broadcasting-terrestrial) e DVB-T2. 
+
+Um algoritmo baseado na extração de características de medidas de PSD para diferentes RATs é apresentado em \cite{Gueguen2009}. Neste caso, o algoritmo de classificação combina várias características genéricas como, por exemplo, distribuição de probabilidade de potência, transformadas wavelet, etc., para classificar as RATs (GSM, UMTS, DVB-T, Wifi, etc.).
+%The discriminating
+%features proposed in our work comprises an overcomplete
+%set of generic features like power probability
+%distributions, wavelet transforms, autoregressive moving
+%average (ARMA) coefficients and entropy-based
+%statistical complexities. More important, these features
+%go through a feature selection mechanism that selects
+%the most relevant feature subset. Thus, the proposed
+%feature determination mechanism is fully cognitive, in
+%the sense that it can be applied to every radio technology,
+%whether or not the specific parameters are known
+%or not.
+
+ Um \emph{testbed} baseado em plataformas como Matlab e USRP (\emph{Universal Software Radio Peripheral}) e ferramentas de SDR4all (\emph{software defined radio}) é apresentado em \cite{Wang2010} para implementação dos sistemas descritos em \cite{Palicot2003, Hachemani2007}.
+
+Dois outros métodos baseados em PSD, os quais buscam ser insensíveis às imperfeições do receptor, tais como espúrios, ruídos não brancos e incertezas na potência do ruído (NPU-\emph{noise power uncertainty}), são apresentados em \cite{Cao2012}.
+
+Em \cite{Habashna2012} é apresentado um  algoritmo de classificação para WiMAX e LTE, baseado numa extensa análise do preambulo, prefixo cíclico e cicloestacionariedade de sinais OFDM.   
+%
+%access technology (RAT) classification scheme framework is
+%built upon the combination of a group of RAT-specific feature
+%metrics using maximum likelihood estimation (MLE) based
+%decision rules.
+
+%cyclic autocorrelation function (CAF)
+%ISSO DEVIA ESTAR EM RESULTADOS
+%\subsection{Um algoritmo preliminar para RATca}
+%Nesta seção é apresentado um algoritmo para RATc. O algoritmo é baseado nos métodos apresentados em, com alguns aperfeiçoamentos.
+
+
+\section{Conclusão}
+Neste capítulo foram apresentados conceitos sobre bloqueadores de telefonia celular, destacando-se os tipos e técnicas usadas para interromper a comunicação entre a ERB e o DM. Também foram apresentados conceitos referentes à estrutura da camada física dos sistemas GSM e LTE. Por fim foi realizada uma revisão sobre diferentes técnicas de classificação de RATs, com o objetivo de reconhecer a RAT usada em uma determinada faixa de espectro em uma determinada área e, assim gerar a SB de acordo com as características predefinidas da referida RAT.
+
+No capítulo seguinte é apresentado o estágio atual da tese através de uma proposta para o desenvolvimento de um sistema de BTM baseado em técnicas eficientes de PDS e de RF, aplicadas aos sistemas GSM e LTE.
+
+
+
+
+
+

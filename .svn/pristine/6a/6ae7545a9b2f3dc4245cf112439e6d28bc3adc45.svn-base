@@ -1,0 +1,187 @@
+
+
+\def \fminLTE {15}    	% Frequencia mínima em banda base LTE
+\def \fBandLTE {25}		% Largura de banda total
+\def \DFLTE{15}    		% Espaçamento entre as subportadoras
+\ADD{\fminLTE}{\fBandLTE}\LTEmaxfreq % Largura de banda do LTE em banda base
+
+\DIVIDE{\fBandLTE}{\DFLTE} \LTEsubportadoras		 % Numero de subportadoras
+\MULTIPLY{\LTEsubportadoras}{1000} \LTEsubportadorasmult % Multiplique LTEsubportadoras para mudar para Mega 
+\ROUND[0]{\LTEsubportadorasmult}\LTEsubportadorasrounded
+		
+%Calcula a frequencia central em BB
+\ADD{\fminLTE}{\LTEmaxfreq}\tempaLTE  % soma fmin + fmax
+\DIVIDE{\tempaLTE}{2}\fcBBtemp  % divide a soma por 2
+%%Fim
+\def \fmaxLTE{\LTEmaxfreq}   % Frequencia máxima em banda base LTE
+\def \fcBBLTE{\fcBBtemp}     % Frequência central em banda base LTE
+
+
+\def \fminRFLTE{869}         % Frequencia mínima em RF LTE
+\def \fmaxRFLTE{894}				 % Frequencia máxima em RF LTE
+
+% Calcula a frequência central em RF
+\ADD{\fminRFLTE}{\fmaxRFLTE}\tempaLTE
+\DIVIDE{\tempaLTE}{2}\fcRFLTEtemp
+\def \fcRFLTE{\fcRFLTEtemp}   %% Frequencia central em RF LTE
+
+% Calcula os valoes de FLO para LTE
+\ADD{\fcRFLTE}{\fcBBLTE}\LTEfloone     % FLO = FRF + FBB 
+\SUBTRACT{\fcRFLTE}{\fcBBLTE}\LTEflotwo % FLO = FRF - FBB
+
+% Calcula os valores de RF para LTE com os dois FLO calculados
+\SUBTRACT{\LTEfloone}{\fcBBLTE}\LTERFoneone % FRF = FLO - FBB
+\ADD{\LTEfloone}{\fcBBLTE}\LTERFonetwo % FRF = FLO + FBB
+
+\SUBTRACT{\LTEflotwo}{\fcBBLTE}\LTERFtwoone % FRF = FLO - FBB
+\ADD{\LTEflotwo}{\fcBBLTE}\LTERFtwotwo % FRF = FLO + FBB
+
+
+\def \Fs{150}  % Frequência de amostragem
+
+%Calcula o valor de N
+\DIVIDE{\Fs}{\DFLTE}\NLTEtemp
+\MULTIPLY{\NLTEtemp}{1000}\NLTE
+%FIM
+
+\DIVIDE{\Fs}{2}\fsdivdois
+\SUBTRACT{\fsdivdois}{\fmaxLTE}\tempBTr
+\MULTIPLY{\tempBTr}{2}\BtrLTE					% Banda de transição
+%\def \BtrLTE{\BtrLTE}
+%\BtrLTE
+%Calcula a localização da  imagem na Nyquist zone 2
+\DIVIDE{\fBandLTE}{2}\tempfBandLTEdivdois
+\ADD{\tempBTr}{\fsdivdois}\tempsecondzNeyquist
+\ADD{\tempsecondzNeyquist}{\tempfBandLTEdivdois}\secondzNeyquist
+%Calcula a frequencia ménima da imagem na Nyquist zone 2
+\SUBTRACT{\secondzNeyquist}{\tempfBandLTEdivdois}\minFreqsecondzNeyquist
+
+%\def \Btr			 
+
+% Variáveis do sistema GSM
+
+\def \fminGSM {25.2}     % Frequencia mínima em banda base GSM
+\def \fBandGSM {24.6}    % LArgura de banda em RF
+\def \DFGSM{200}         % Espaçamento entre a subportadoras GSM
+\ADD{\fminGSM}{\fBandGSM}\GSMmaxfreq % Calcula a frequência máxima
+\def \fmaxGSM{\GSMmaxfreq}   % Frequencia máxima em banda base GSM
+
+\DIVIDE{\fBandGSM}{\DFGSM} \GSMsubportadoras		 % Numero de subportadoras GSM
+\MULTIPLY{\GSMsubportadoras}{1000} \GSMsubportadorasmult % Multiplique GSMsubportadoras para mudar para Mega GSM
+\ROUND[0]{\GSMsubportadorasmult}\GSMsubportadorasrounded % Arredonda para cima GSM
+
+%Calcula a frequencia central em BB
+\ADD{\fminGSM}{\GSMmaxfreq}\tempaGSM  % soma fmin + fmax
+
+\DIVIDE{\tempaGSM}{2}\fcBBGSMtemp  % divide a soma por 2
+\def \fcBBGSM{\fcBBGSMtemp}     % Frequência central em banda base GSM
+%%Fim
+
+
+
+\def \fminRFGSM{935.2}         % Frequencia mínima em RF GSM
+\def \fmaxRFGSM{959.8}				 % Frequencia máxima em RF GSM
+
+% Calcula a frequência central em RF
+\ADD{\fminRFGSM}{\fmaxRFGSM}\tempaGSM
+\DIVIDE{\tempaGSM}{2}\fcRFGSMtemp
+\def \fcRFGSM{\fcRFGSMtemp}   %% Frequencia central em RF GSM
+
+% Calcula os valoes de FLO para GSM
+\ADD{\fcRFGSM}{\fcBBGSM}\GSMfloone     % FLO = FRF + FBB 
+\SUBTRACT{\fcRFGSM}{\fcBBGSM}\GSMflotwo % FLO = FRF - FBB
+
+% Calcula os valores de RF para GSM com os dois FLO calculados
+\SUBTRACT{\GSMfloone}{\fcBBGSM}\GSMRFoneone % FRF = FLO - FBB
+\ADD{\GSMfloone}{\fcBBGSM}\GSMRFonetwo % FRF = FLO + FBB
+
+\SUBTRACT{\GSMflotwo}{\fcBBGSM}\GSMRFtwoone % FRF = FLO - FBB
+\ADD{\GSMflotwo}{\fcBBGSM}\GSMRFtwotwo % FRF = FLO + FBB
+
+
+%Calcula o valor de N
+\DIVIDE{\Fs}{\DFGSM}\NGSMtemp
+\MULTIPLY{\NGSMtemp}{1000}\NGSM
+%FIM
+
+
+\SUBTRACT{\fsdivdois}{\fmaxGSM}\tempBTrGSM
+\MULTIPLY{\tempBTrGSM}{2}\BtrGSM				% Banda de transição
+%\def \BtrGSM{\BtrGSM}
+%\BtrGSM
+%Calcula a localização da  imagem na Nyquist zone 2
+\DIVIDE{\fBandGSM}{2}\tempfBandGSMdivdois
+%\tempfBandGSMdivdois
+
+\ADD{\tempBTrGSM}{\fsdivdois}\tempsecondzNeyquistGSM
+%\tempsecondzNeyquistGSM
+
+\ADD{\tempsecondzNeyquistGSM}{\tempfBandGSMdivdois}\secondzNeyquistGSM
+%\secondzNeyquistGSM
+%Calcula a frequencia ménima da imagem na Nyquist zone 2
+\SUBTRACT{\secondzNeyquistGSM}{\tempfBandGSMdivdois}\minFreqsecondzNeyquistGSM
+
+% Calcula as potências e SNR a partir da PSD do ANALIZADOR GSM
+\def \PsdBmGSM{-5.2}   % Potência do sinal em dBm
+\def \PnoisedBmHzGSM{-136.7}   % Potência do ruído em dBm/Hz
+\MULTIPLY{10}{7.8751 }\multisolGSM		     % 10*log10(fs/2)
+\ADD{\PnoisedBmHzGSM}{\multisolGSM}\NoisedBmGSM  % PnoisedbmHz + 10*log10(fs/2)		
+\ROUND[0]{\NoisedBmGSM}\roundNoisedBmGSM				 % round(solution)	
+\SUBTRACT{\PsdBmGSM}{\roundNoisedBmGSM}\RSRsolGSM	 % RSR = PsdBm - rounded soulution
+\ROUND[0]{\RSRsolGSM}\RSRGSM					 % Round RSR
+
+
+% Calcula as potências e SNR a partir da PSD do ANALIZADOR GSM
+\def \PsdBmLTE{-4.3 }   % Potência do sinal em dBm
+\def \PnoisedBmHzLTE{-135}   % Potência do ruído em dBm/Hz
+\MULTIPLY{10}{7.8751 }\multisolLTE		     % 10*log10(fs/2)
+\ADD{\PnoisedBmHzLTE}{\multisolLTE}\NoisedBmLTE  % PnoisedbmHz + 10*log10(fs/2)		
+\ROUND[0]{\NoisedBmLTE}\roundNoisedBmLTE	 % round(solution)	
+\SUBTRACT{\PsdBmLTE}{\roundNoisedBmLTE}\RSRsolLTE	 % RSR = PsdBm - rounded soulution
+\ROUND[0]{\RSRsolLTE}\RSRLTE					 % Round RSR
+
+
+% Calcula as potências e SNR a partir da PSD do ANALIZADOR GSM-RF
+\def \PsdBmRFGSM{4.28}   % Potência do sinal em dBm
+\def \PnoisedBmHzUPRFGSM{-120}   % Potência do ruído em dBm/Hz abaixo da banda de interesse
+\MULTIPLY{10}{7.8808 }\multisolUPRFGSM		     % 10*log10(fs/2)
+\ADD{\PnoisedBmHzUPRFGSM}{\multisolUPRFGSM}\NoisedBmUPRFGSM  % PnoisedbmHz + 10*log10(fs/2)		
+\ROUND[0]{\NoisedBmUPRFGSM}\roundNoisedBmUPRFGSM				 % round(solution)	
+\SUBTRACT{\PsdBmRFGSM}{\roundNoisedBmUPRFGSM}\RSRsolUPRFGSM	 % RSR = PsdBm - rounded soulution
+\ROUND[0]{\RSRsolUPRFGSM}\RSRUPRFGSM					 % Round RSR
+
+% Calcula as potências e SNR a partir da PSD do ANALIZADOR GSM-RF
+\def \PnoisedBmHzDOWNRFGSM{-128.2}   % Potência do ruído em dBm/Hz abaixo da banda de interesse
+\MULTIPLY{10}{7.8808 }\multisolDOWNRFGSM		     % 10*log10(fs/2)
+\ADD{\PnoisedBmHzDOWNRFGSM}{\multisolDOWNRFGSM}\NoisedBmDOWNRFGSM  % PnoisedbmHz + 10*log10(fs/2)		
+\ROUND[0]{\NoisedBmDOWNRFGSM}\roundNoisedBmDOWNRFGSM				 % round(solution)	
+\SUBTRACT{\PsdBmRFGSM}{\roundNoisedBmDOWNRFGSM}\RSRsolDOWNRFGSM	 % RSR = PsdBm - rounded soulution
+\ROUND[0]{\RSRsolDOWNRFGSM}\RSRDOWNRFGSM					 % Round RSR
+
+
+
+% Calcula as potências e SNR a partir da PSD do ANALIZADOR GSM-RF
+\def \PnoisedBmHzUPRFGSM{-120}   % Potência do ruído em dBm/Hz acima da banda de interesse
+\MULTIPLY{10}{7.8808 }\multisolUPRFGSM		     % 10*log10(fs/2)
+\ADD{\PnoisedBmHzUPRFGSM}{\multisolUPRFGSM}\NoisedBmUPRFGSM  % PnoisedbmHz + 10*log10(fs/2)		
+\ROUND[0]{\NoisedBmUPRFGSM}\roundNoisedBmUPRFGSM				 % round(solution)	
+\SUBTRACT{\PsdBmRFGSM}{\roundNoisedBmUPRFGSM}\RSRsolUPRFGSM	 % RSR = PsdBm - rounded soulution
+\ROUND[0]{\RSRsolUPRFGSM}\RSRUPRFGSM					 % Round RSR
+
+% Calcula as potências e SNR a partir da PSD do ANALIZADOR LTE-RF
+\def \PsdBmRFLTE{4.2}   % Potência do sinal em dBm
+\def \PnoisedBmHzDOWNRFLTE{-113.1}   % Potência do ruído em dBm/Hz abaixo da banda de interesse
+\MULTIPLY{10}{7.8808 }\multisolDOWNRFLTE		     % 10*log10(fs/2)
+\ADD{\PnoisedBmHzDOWNRFLTE}{\multisolDOWNRFLTE}\NoisedBmDOWNRFLTE  % PnoisedbmHz + 10*log10(fs/2)		
+\ROUND[0]{\NoisedBmDOWNRFLTE}\roundNoisedBmDOWNRFLTE				 % round(solution)	
+\SUBTRACT{\PsdBmRFLTE}{\roundNoisedBmDOWNRFLTE}\RSRsolDOWNRFLTE	 % RSR = PsdBm - rounded soulution
+\ROUND[0]{\RSRsolDOWNRFLTE}\RSRDOWNRFLTE					 % Round RSR
+
+
+\def \PnoisedBmHzUPRFLTE{-122}   % Potência do ruído em dBm/Hz acima da banda de interesse
+\MULTIPLY{10}{7.8808 }\multisolUPRFLTE		     % 10*log10(fs/2)
+\ADD{\PnoisedBmHzUPRFLTE}{\multisolUPRFLTE}\NoisedBmUPRFLTE  % PnoisedbmHz + 10*log10(fs/2)		
+\ROUND[0]{\NoisedBmUPRFLTE}\roundNoisedBmUPRFLTE				 % round(solution)	
+\SUBTRACT{\PsdBmRFLTE}{\roundNoisedBmUPRFLTE}\RSRsolUPRFLTE	 % RSR = PsdBm - rounded soulution
+\ROUND[0]{\RSRsolUPRFLTE}\RSRUPRFLTE					 % Round RSR
+

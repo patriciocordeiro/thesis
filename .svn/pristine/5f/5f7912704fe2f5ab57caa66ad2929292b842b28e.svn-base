@@ -1,0 +1,257 @@
+%-------------------------------------------------------------------------------------
+% Modelo LateX de TCC, Dissertação e Tese do Laboratório de Eletromagnetismo Aplicado  
+%-------------------------------------------------------------------------------------
+\documentclass[12pt,a4paper]{report}
+\usepackage[none]{hyphenat}
+\usepackage{amssymb,amsfonts,amstext,amsmath}
+%\usepackage[leqno]{amsmath} % Número das equações do lado esquerdo
+\usepackage[brazil]{babel}   % Para hifenar em português
+\usepackage[latin1]{inputenc}% Para poder digitar os acentos da maneira usual:
+%\usepackage[active]{srcltx} % Retire o comentário desta linha se seu sistema
+                          % suporta o recurso busca inversa
+\usepackage[mathscr]{eucal}  % inclui a fonte matemática caligráfica $\mathscr{C}$
+%\usepackage{makeidx}        % Índice remissivo
+%\usepackage{multind}
+%\usepackage{makeidx}
+%\makeindex{indicetotal}
+%\usepackage{times}          % Para que o documento aceite a fonte Times Roman
+%\usepackage[dvips]{graphicx} % Inclui figuras
+\usepackage{calculator} % Calculadora científica 
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{epsfig}
+\usepackage{subfigure}
+%\usepackage{tabular}
+%\usepackage[none]{hyphenat}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{lscape}
+\restylefloat{figure}
+\usepackage{hyperref}
+\usepackage[table]{xcolor}
+
+\usepackage{algorithm}
+\usepackage[algo2e,linesnumbered]{algorithm2e}
+
+
+\definecolor{algoColorKeyword}{named}{blue}
+\definecolor{algoColorComment}{named}{olive}
+\renewcommand{\KwSty}[1]{{\color{algoColorKeyword}\textbf{#1}}}
+\renewcommand{\CommentSty}[1]{{\color{algoColorComment}\texttt{#1}}}
+\usepackage{nomencl}
+\makenomenclature
+\newcommand{\rr}{\raggedright}
+\newcommand{\tn}{\tabularnewline}
+\usepackage{epstopdf}
+\epstopdfsetup{update} % only regenerate pdf files when eps file is newer
+%\hypersetup{
+%   colorlinks,
+%   debug=false,
+%   linkcolor=black,  %%% cor do tableofcontents, \ref, \footnote, etc
+%   %citecolor=black,  %%% cor do \cite
+%   %urlcolor=blue,   %%% cor do \url e \href
+%   %bookmarks=true,
+%   bookmarksopen=true,
+%   %backref=true,
+%   pdfpagemode=UseOutlines,
+%   bookmarksnumbered=true,
+%   %pdfpagemode=FullScreen %%% Iniciar em modo apresentação
+%}
+
+%\usepackage[backref=true,pdfpagemode=UseOutlines,bookmarks=true,bookmarksopen=true,bookmarksnumbered=true]{hyperref}
+
+%-------------------------------------------------------------------------------------     
+% Definição do formato do documento  
+%-------------------------------------------------------------------------------------
+%\usepackage[top=2.5cm,left=3cm,right=2cm,bottom=2.5cm]{geometry}
+
+\setlength{\topskip}{0cm}            % Distância do início do texto à primeira linha
+\setlength{\topmargin}{2cm}          % Tamanho da margem superior (acima do número de página)
+\renewcommand{\baselinestretch}{1.5} % Espaçamento entre linhas
+\if@twoside \oddsidemargin=2.5cm \evensidemargin=2cm \else % Definindo as margens para 
+\oddsidemargin=2.5cm \evensidemargin=2cm \fi               % impressão página dupla ou simples
+\setlength{\voffset}{-2.54cm}        % Zerando a mergem superior (pois já tem 1 pol = 2.54cm)
+\listfiles
+\setlength{\hoffset}{-2.54cm}        % Zerando margem esquerda(pois já tem 1 pol = 2.54cm)
+\setlength{\parskip}{0.0cm}          % Espaço entre parágrafos
+\setlength{\textwidth}{16.8cm}       % Largura do texto
+\setlength{\textheight}{23.7cm}      % Altura do texto
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+\sloppy
+\setlength{\parindent}{1.25cm}       % Definindo tamanho da identação
+\RequirePackage{indentfirst}         % Define a identação dos primeiros parágrafos
+\RequirePackage{ifthen}              % Pacote para fazer comparações.
+\RequirePackage{hangcaption}         % Para a legenda ficar identada na segunda linha em diante
+\setlength{\captionwidth}{15cm}      % Ajustando o tamanho do caption da legenda
+\usepackage{caption}
+\captionsetup[algorithm]{labelformat=empty}
+
+\input{../../public/definitions}
+%\input{../../public/usepackages}
+
+%\input{glodef}
+%\input{definitions}
+% definicoes do glodef
+%\newcommand{\deck}{{F}}
+%\newcommand{\decb}{{f}}
+% definições para o capitulo de AMC
+\def \rvn {{\mathsf N}} %random variables
+\def \rvr {{\mathsf R}}
+\def \rve {{\mathsf E}}
+
+\def \xtbb {{x^{\textrm{BB}}(t)}}
+\def \xnbb {{x[n]}}
+\def \xtrf {{x^{\textrm{RF}}(t)}}
+
+\def \fminLTE {15}
+\input{14_patricio_jammer_variaveis}
+%\newcommand {\arrowedbox}[1] {{\rightarrow\fbox{#1}\rightarrow}}
+
+\newcommand{\hH}{\hat{H}}
+\newcommand{\D}{^\dagger}
+\newcommand{\ua}{\uparrow}
+\newcommand{\nc}{\newcommand}
+\nc{\da}{\downarrow} \nc{\hc}{\hat{c}} \nc{\hS}{\hat{S}}
+%\nc{\bra}{\langle} \nc{\ket}{\rangle} \nc{\eq}{equation (\ref}
+%\nc{\h}{\hat} \nc{\hT}{\h{T}}\nc{\be}{\begin{eqnarray}}
+\nc{\ee}{\end{eqnarray}}\nc{\rd}{\textrm{d}}\nc{\e}{eqnarray}\nc{\hR}{\hat{R}}\nc{\Tr}{\mathrm{Tr}}
+\nc{\tS}{\tilde{S}}\nc{\tr}{\mathrm{tr}}\nc{\8}{\infty}\nc{\lgs}{\bra\ua,\phi|}\nc{\rgs}{|\ua,\phi\ket}
+\nc{\hU}{\hat{U}}\nc{\lfs}{\bra\phi|}\nc{\rfs}{|\phi\ket}\nc{\hZ}{\hat{Z}}\nc{\hd}{\hat{d}}\nc{\mD}{\mathcal{D}}
+%\nc{\bd}{\bar{d}}\nc{\bc}{\bar{c}}\nc{\mc}{\mathcal}\nc{\ea}{eqnarray}\nc{\mG}{\mathcal{G}}\nc{\bce}{\begin{center}}
+\nc{\ece}{\end{center}}
+%-------------------------------------------------------------------------------------
+% Comandos para colocar uma linha no topo da página 
+%-------------------------------------------------------------------------------------
+
+\newlength{\pagewidth}
+\setlength{\pagewidth}{\textwidth}
+\makeatletter
+\def\ps@headings{\def\@oddfoot{}
+\def\@oddhead{\makebox[\textwidth][l]{\underline{\hbox to \pagewidth{\textbf \hfill\thepage}}}}
+\def\@evenfoot{}
+\def\@evenhead{\makebox[\textwidth][r]{\underline{\hbox to \pagewidth{\textbf \thepage}}}}}
+
+%-------------------------------------------------------------------------------------     
+% Numeração seqüêncial envolvendo os ítens abaixo  
+%-------------------------------------------------------------------------------------
+% Obs1: Colocar apenas quando for TCC, Dissertação ou Tese
+% Obs2: Se colocar [section] no lugar de [chapter] a numeração é feita por seção
+%-------------------------------------------------------------------------------------
+
+\newtheorem{teorema}{Teorema}[chapter]
+\newtheorem{axioma}[teorema]{Axioma}
+\newtheorem{definicao}[teorema]{Definição}
+\newtheorem{proposicao}[teorema]{Proposição}
+\newtheorem{lema}[teorema]{Lema}
+\newtheorem{corolario}[teorema]{Corolário}
+\newtheorem{observacao}[teorema]{Observação}
+\newtheorem{observacoes}[teorema]{Observações}
+\newtheorem{exemplo}[teorema]{Exemplo}
+
+%-------------------------------------------------------------------------------------     
+% Corrige hifenizações erradas  
+%-------------------------------------------------------------------------------------
+
+%\hyphenation{res-pec-ti-va-men-te Ge-ne-ra-li-za-dos}
+
+\numberwithin{equation}{chapter} % numera as equações por capítulo
+
+%-------------------------------------------------------------------------------------
+% Definições de comandos
+%-------------------------------------------------------------------------------------
+
+\newcommand{\parag}{\vspace*{\parindent}}   % dá a distância de um parágrafo quando
+                                            % o LaTeX não coloca o parágrafo.
+\newcommand{\delim}[3]{\left#1 #3 \right#2} % criando um delimitador generico
+\newcommand{\modulo}[1]{\delim{|}{|}{#1}}   % comando modulo
+\newcommand{\sen}[1]{\textrm{ sen  } \!\! #1 \!\! \textrm{ } } % Comando seno()
+
+%-------------------------------------------------------------------------------------
+% Letras Gregas
+%-------------------------------------------------------------------------------------
+
+\def \epsilon {\varepsilon}
+
+%-------------------------------------------------------------------------------------
+% Comandos opcionais
+%-------------------------------------------------------------------------------------
+
+%\renewcommand{\thechapter}{\arabic{chapter}}
+%\renewcommand{\thesection}{\arabic{section}}
+%\renewcommand{\theenumi}{\roman{enumi}}
+
+%\renewcommand{\theenumi}{\roman{enumi}} % numera a lista enumerate com números romanos
+                                         % minúsculos. Tente também \Roman, \arabic,
+                                         % \alph, \Alph
+
+%-------------------------------------------------------------------------------------     
+% Inicio do documento  
+%-------------------------------------------------------------------------------------
+
+\begin{document}
+
+\pagestyle{empty}
+
+\include{./folhasiniciais/capa}						% insere a capa (arquivo capa.tex)                   
+%\include{./folhasiniciais/dedicatoria}  		% insere a dedicatória (arquivo dedicatoria.tex)             
+%\include{./folhasiniciais/agradecimentos} 	% insere os agradecimentos (arquivo agradecimentos.tex)        
+ \include{./folhasiniciais/resumo}    			%insere o resumo (arquivo resumo.tex) 
+
+%\include{./folhasiniciais/abstract}       	% LF: não creio que seja necessário p/ a quali... o tempo tá corridoooooo
+\cleardoublepage
+\pagestyle{plain}
+\pagenumbering{roman}
+\tableofcontents 						% gera o índice (Sumário)
+
+%------------------------------------------
+% Gera automaticamente a Lista de Figuras
+%------------------------------------------ 
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Lista de Figuras}
+\listoffigures        			% gera índice de figuras
+
+
+%------------------------------------------
+% Gera automaticamente a Lista de Tabelas
+%------------------------------------------ 
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Lista de Tabelas}
+\listoftables							% gera índice de tabelas
+
+%% glossário
+\cleardoublepage 
+\addcontentsline{toc}{chapter}{Gloss\'ario}\cite{Aka91}
+\renewcommand{\nomname}{Gloss\'ario}
+\printnomenclature [1 in]
+
+%\include{./folhasiniciais/listadesimbolos}
+
+\pagestyle{headings}
+\pagenumbering{arabic}
+
+\baselineskip 18.5pt % distância entre as bases das linhas.
+                     % Muda a distância das linhas. 1pt = 1/72 in. 1 in = 2.54cm
+\parskip 5pt         % distância extra entre parágrafos.
+
+
+\include{./chapters/chap1/intro} % introdução\cite{Anguita02}
+%\chapter{Estimação de canal}
+%\include{./chapters/chap2/dsl} % Cyclo e OFDM
+%
+\include{./chapters/chap2/jammer} % metodologia
+\include{./chapters/chap3/proposta_sistema_btm} % resultados
+\include{./chapters/chap4/resultados} % resultados
+\include{./chapters/chap5/proposta_da_tese} % conclusao
+\include{./chapters/chap6} % publicacoes
+\bibliographystyle{../../public/IEEEbib}
+\bibliography{../../public/telecom,../../public/mlearning}
+%\input{indice.ind}
+\addcontentsline{toc}{chapter}{Bibliografia} %para aparecer a  bibliografia no índice
+
+\end{document}
+
+
+

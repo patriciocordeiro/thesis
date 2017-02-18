@@ -1,0 +1,15 @@
+\addcontentsline{toc}{chapter}{Referências} %\label{Cap:refer}
+
+
+\bibliographystyle{IEEEbib}
+\bibliography{telecom}
+%\begin{thebibliography}{}
+
+%Here you include the .bib files with your references:
+%Here you include the .bib files with your references:
+
+
+
+
+
+\end{thebibliography}

@@ -1,0 +1,204 @@
+
+%\section{Trabalhos Relacionados}
+\chapter{Planejamento da Pesquisa Futura e Cronograma}
+
+%Todos os BS transmitiraõ multirats.
+%De tal forma que sistemas de bloqueio simples são geralmente projetados para atuar em uma determinada área do espectro e bloquear uma RAT específica.
+%
+%Com o avanço da tecnologia e a inclusão de novas RATs, a demanda do espectro está crescendo cada vez mais. Bandas de frequência abaixo de 1GHz estão se tornando cada vez mais congestionados, especialmente em áreas urbanas. Desta forma, o compartilhamento do espectro por diferentes tipos de RATs se torna cada vez mais comuns. 
+
+%Neste trabalho foram apresentadas arquiteturas que combinam técnicas de PAS e PDS para computação e transmissão de SBs para bloqueio de STMs. 
+
+Nesta proposta foram investigadas técnicas para se obter um sistema de BTM flexível e reconfigurável, o qual combina técnicas de (PDS) e de PAS para gerar o sinal de bloqueio em banda base e em RF, respectivamente.
+O arcabouço do sistema proposto é formado por uma (ULD) Lógica Digital e um transmissor-heteródino (TH)\nomenclature{TH}{Transmissor-Heteródino} para gerar um sinal de bloqueio, onde este pode ser reconfigurado em tempo real para cobrir diferentes bandas do espectro. 
+
+Uma metodologia de projeto para gerar o SBD-BB e uma expressão para a RSR de quantização para sinais multitom foram derivadas, avaliadas e validadas em experimentos de PDS realizados no ambiente de simulação Matlab. A metodologia foi estendida para uma implementação prática para a geração do SBD-BB.
+
+A parte da lógica digital foi realizada usando um FPGA. Esse módulo foi avaliado e validado em experimentos práticos de geração de sinais em banda base.
+
+As técnicas e arquiteturas investigadas formaram a base que derivou um protótipo de BTM completo, o qual tem a vantagem de ser reconfigurável e usar poucos recursos de hardware no processo de geração do SB. O protótipo foi testado em experimentos práticos de geração de SB em banda base e em RF com resultados satisfatórios.
+
+%Por fim é apresentado um protótipo do sistema BTM completo, desenvolvido na UFPA. O protótipo é testado em experimentos práticos de geração de SB em banda base e em RF.
+
+
+%Neste trabalho, propõe-se um sistema de BTM com classificador de RAT integrado. O sistema proposto será reconfigurável e será capaz de alterar os seuts parâmetros de transmissão de acordo com as atividades observadas em uma certa área do espectro em uma certa região geográfica.
+
+A proposta desta tese é de continuar o trabalho já desenvolvido  para incluir um módulo de RATc no sistema do BTM. A tarefa principal focaliza: investigar e desenvolver novos algoritmos que sejam eficientes e de fácil implementação para classificação de RATs; prover uma arquitetura baseada em FPGA, focada na redução de recursos de hardware e processamento rápido, para implementação em hardware dos algoritmos desenvolvidos; investigar e desenvolver novos algoritmos para a geração automática, em tempo real, do SBD-BB;  prover um arcabouço que integre classificação e geração dos SBs, com capacidade de monitorar o espectro, identificar atividades e classificar as RATs atuantes em uma determinada faixa de espectro, em uma determinada área. A partir dos RATs classificados, o BTM deverá adequar os seus parâmetros de geração e transmissão do SB de acordo com os parâmetros pré-estabelecidos para cada RAT.
+
+O diagrama em blocos do arcabouço proposto é apresentado na Figura~\ref{fig:RATcBTM}. Este sistema é composto por um módulo de receptor-heteródino, um módulo de RATc, um módulo gerador e um módulo de transmissor-heteródino.
+\begin{figure}[h!]%
+\includegraphics[width=\columnwidth]{./figure/RATc_BTM}%
+\caption{Sistema de identificação de RAT e bloqueio do SM.}%
+\label{fig:RATcBTM}%
+\end{figure}
+
+A função de cada um dos módulos é descrito a seguir:
+\begin{itemize}
+\item \textbf{Receptor-heteródino}-Tem a função de receber o sinal de RF da antena, transladá-lo para uma FI e enviar para o conversor de AD. 
+\item \textbf{Pré-processador digital } - A função deste módulo é de receber digitalizar e condicionar o sinal para pós-processamento. Este módulo será implementado em FPGA.
+\item \textbf{RATc}-- A função deste módulo é de extrair as características (temporais ou frequênciais) pré-determinadas do sinal pré-processado, realizar a classificação da RAT através de algoritmos rápidos e eficientes implementados em FPGA e gerar uma etiqueta (rótulo ou classe) de acordo com a RAT determinada.
+ %ectr usar o sinal pré-proceesado identificar a RAT e as bandas de frequências usadas através das amostras fornecidas pelo módulo receptor. 
+\item \textbf{Gerador}-- Este módulo recebe do classificador a etiqueta da RAT identificada e gera o SBD-BB de acordo com as características ($\Delta_f$, $BW$, etc.) pré-estabelecidas para aquela RAT específica. Em seguida o SBD-BB é convertido para SB-BB e enviado para o transmissor.
+%Apl prée o converte para SB-BB banda base do sinal digital para a BTM. A geração do sinal é realizada de acordo com a RAT e as bandas usadas.  
+\item \textbf{Transmissor-heteródino}-- Tem a função de transladar o SB-BB para SB-RF e enviar para antena para transmissão. 
+\end{itemize}
+
+O principal objetivo da tese é avançar o processamento digital de sinais para BTMs, focando
+por exemplo em problemas como RATc.
+Mas o protótipo tem sua importância pois será usado para validação. Assim, além da pesquisa
+de novos algoritmos em si, serão feitas melhorias no protótipo, as quais serão financiadas
+pela empresa Brasilat, que colabora com a UFPA nesta pesquisa.
+
+Com o objetivo de melhorar a qualidade do sinal gerado, em termos de emissão de espúrios fora da faixa e de filtragem, propõe-se as seguintes mudanças e melhorias para o protótipo Beta do BTM:
+
+\begin{itemize}
+\item \textbf{Amplificador de banda base} - Selecionar um amplificador com menor ganho e menos distorção na banda desejada, de modo a preservar o espectro do sinal em banda base, em termos de emissão de espúrios fora da faixa.
+\item \textbf{Mixer} - Selecionar mixers de nível 3 ou 4, com o objetivo de diminuir a potência exigida na entrada do LO. Talvez seja necessário usar mixers ativos ou de supressão de banda, para atenuar os sinais do LO e da imagem não desejada do sinal.
+\item \textbf{Amplificador de RF} -	Selecionar um novo amplificador com menor ganho e menor distorção nas frequências de interesse em RF, com o objetivo de diminuir as emissões fora da faixa em RF.
+
+%Projetar a placa para diminuir ou eliminar a interferência entre-canais, externos e também impedir que este interfira em outros sistemas vizinhos.
+
+\item Adotar implementação modular onde cada canal possui sua própria placa de transmissor heteródino de modo a evitar o vazamento do sinal de RF de um canal para outro.
+\item Prover blindagem  usando módulos de blindagem de RF de modo a evitar a interferência deste em outros sistemas e de outros sistemas neste. Um exemplo de esquema de blindagem de PCB com uso de módulos de metal é  apresentado na Figura~\ref{fig:RFboardsheild}
+\begin{figure}%
+\centering
+\includegraphics[width=0.8\columnwidth]{./figure/RF_board_sheild}
+\caption{Exemplo ilustrativo de blindagem de sinais de RF em PCB.}%
+\label{fig:RFboardsheild}%
+\end{figure}
+
+\end{itemize}
+
+
+Sugestões de melhoria do projeto da PCB:
+\begin{itemize}
+\item Projetar a PCB para prover isolamento nas trilhas, principalmente aquelas que conduzem os sinais de RF. 
+	\item  Isolar as trilhas do sinal de RF com ``cercas de vias"  para evitar interferência eletromagnética entre os sinais. Um exemplo desta técnica é apresentado na Figura~\ref{fig:pcbviafence}%
+
+	\item Isolar as partes de frequência mais baixa das de frequências mais altas com blindagem metálica.
+\end{itemize}
+
+\begin{figure}%
+\centering
+\includegraphics[width=0.8\columnwidth]{./figure/pcb_via_fence}%
+\caption{Exemplo de uso de ``cercas de vias" para proteger a trilha do sinal de RF.}%
+\label{fig:pcbviafence}%
+\end{figure}
+
+%Desenvolver algoritmos de RATc e projetar um sistema de RATc baseado em 
+
+%FAZER O PROTÓTIPO DEU MAIS TRABALHO: AGORA VAI ANDAR MAIS RÁPIDO.
+%ESTAMOS ENCAMINHANDO PUBLICAÇÃO. 
+%
+%Propor uma melhoria 
+%Melhorar o protótipo já desenvolvido, substituindo alguns componentes e realizando 
+%Nos seguintes aspectos:
+
+%\section{Contribuições Esperadas da Proposta} 
+%Fornecer algoritmos eficientes baseados em processamento digital de sinais para geração de sinais de bloqueio de SM.
+%
+%\section{Metodologia}
+%Neste trabalho é proposto  uma arquitetura digital baseado em FPGA para implementação de algoritmos para geração da versão em banda base do sinal SB-RF. 
+%
+%Nos últimos anos, FPGA's tornaram-se uma solução atraente para a implementação de sistemas de processamento digital de sinais. FPGA's consistem de elementos lógicos (LEs) e de memória que podem ser configurados para operar em modos diferentes. FPGA's fornecem uma arquitetura reconfigurável programado via hardware que pode alcançar altas taxas de processamento. Esta flexibilidade é a principal vantagem do FPGA.
+%A arquitetura proposta é baseada em processamento \textit{off-line} que visa diminuir significativamente o consumo de hardware do FPGA.
+
+%Nesta seção é apresentada uma arquitetura e algoritmos para bloqueio de sinais de telefonia celular baseadas em FPGA. A arquitetura proposta é apresentada na 
+\section{Cronograma Proposto}
+As principais atividades para a continuação deste trabalho estão resumidas no cronograma seguinte:
+\begin{enumerate}
+\item Aperfeiçoar e manter atualizada a revisão bibliográfica e estado da arte em classificação de RATs.
+\item Investigar algoritmos de classificação de RATs propostos na literatura e contrastar os baseados nas características espectrais com os baseados nas características temporais. Selecionar, implementar e simular em Matlab os algoritmos de maior relevância.
+	\item Propor novos algoritmos de classificação de RATs, voltadas para sistemas GSM e LTE. Simular os algoritmos em ambiente Matlab e Weka.
+	\item Implementar os algoritmos propostos em VHDL e testar em ambiente de simulação Multisim.
+	\item Propor uma arquitetura baseada em FPGA para um classificador de RATs, baseado nos algoritmos desenvolvidos.  
+	\item Investigar algoritmos e técnicas de PDS baseados em FPGA propostos na literatura para  a geração automática de sinais multitom.
+		\item Propor algoritmos eficientes, baseados em VHDL para geração automática de sinais multitom. Simular os algoritmos nas plataformas Quartus II e Modelsim.
+	\item Implementar em FPGA, mediante plataformas de desenvolvimento da Altera, um sistema para geração automática de sinais multitom, baseado nos algoritmos desenvolvidos.
+\item Implantar as melhorias sugeridas no protótipo Beta do BTM.
+\item Realizar testes de verificação de qualidade do sinal na saída de cada canal do BTM
+\item Selecionar novos componentes para o protótipo beta do BTM
+\item Projetar um novo circuito para o BTM beta
+\item Projetar a PCB do BTM beta 
+\item Montar e testar o BTM beta
+\item Publicação de artigos
+\item Escrita e defesa da tese
+\end{enumerate}
+
+%\begin{table}[h!]
+  %\centering
+  %\caption{Cronograma de execução das atividades futuras propostas.}
+    %\begin{tabular}{|c|c|c|c|c|c|c|}
+    %\hline
+    %Atividade & Nov   & Dez   & Jan   & Fev   & Mar   & Abril \\
+    %\hline
+    %1)    & X     &       &       &       &       &  \\
+    %\hline
+    %2)    & X     &       &       &       &       &  \\
+    %\hline
+    %3)    & X     & X     &       &       &       &  \\
+    %\hline
+    %4)    & X     & X     &       &       &       &  \\
+    %\hline
+    %5)    &       & X     & X     &       &       &  \\
+    %\hline
+    %6)    &       & X     & X     &       &       &  \\
+    %\hline
+    %7)    & X     &       &       &       &       &  \\
+    %\hline
+    %8)    & X     & X     & X     &       &       &  \\
+    %\hline
+    %9)    & X     & X     & X     &       &       &  \\
+    %\hline
+    %10)   &       &       & X     & X     &       &  \\
+    %\hline
+    %11)   &       &       & X     & X     & X     & X \\
+    %\hline
+    %\end{tabular}%
+  %\label{tab:addlabel}%
+%\end{table}%
+
+% Table generated by Excel2LaTeX from sheet 'Plan1'
+\begin{table}[ht]
+  \centering
+  \caption{Cronograma de execução das atividades futuras propostas.}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    Atividade & Nov   & Dez   & Jan   & Fev   & Mar   & Abril & Maio  & Jun   & Jul   & Ago   & Set   & Out   & Nov \\
+    \hline
+    1)    & X     &       &       &       &       &       &       &       &       &       &       &       &  \\
+    \hline
+    2)    & X     & X     &       &       &       &       &       &       &       &       &       &       &  \\
+    \hline
+    3)    &       & X     &       &       &       &       &       &       &       &       &       &       &  \\
+    \hline
+    4)    &       & X     & X     &       &       &       &       &       &       &       &       &       &  \\
+    \hline
+    5)    &       &       & X     & X     & X     &       &       &       &       &       &       &       &  \\
+    \hline
+    6)    &       &       &       & X     & X     &       &       &       &       &       &       &       &  \\
+    \hline
+    7)    &       &       &       &       & X     & X     &       &       &       &       &       &       &  \\
+    \hline
+    8)    &       &       &       &       & X     & X     & X     &       &       &       &       &       &  \\
+    \hline
+    9)    &       &       &       &       &       &       & X     &       &       &       &       &       &  \\
+    \hline
+    10)   &       &       &       &       &       &       & X     &       &       &       &       &       &  \\
+    \hline
+    11)   &       &       &       &       &       &       &       & X     &       &       &       &       &  \\
+    \hline
+    12)   &       &       &       &       &       &       &       & X     &       &       &       &       &  \\
+    \hline
+    13)   &       &       &       &       &       &       &       & X     & X     &       &       &       &  \\
+    \hline
+    14)   &       &       &       &       &       &       &       &       & X     &       &       &       &  \\
+    \hline
+    15)   &       &       &       &       &       &       &       &       &       & X     & X     &       &  \\
+    \hline
+    16)   &       &       &       &       &       &       &       &       &       &       & X     & X     & X \\
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
